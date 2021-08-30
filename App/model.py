@@ -36,13 +36,51 @@ los mismos.
 """
 
 # Construccion de modelos
+def newCatalog():
+    catalog = {'pieces': None,
+               'artists': None,
+               'departments': None}
+    
+    catalog['pieces'] = lt.newList('ARRAY_LIST')
+    catalog['artists'] = lt.newList('ARRAY_LIST')
+    catalog['departments'] = lt.newList('ARRAY_LIST',
+                                        cmpfunction=comparedepartments)
 
+    return catalog
+               
 # Funciones para agregar informacion al catalogo
+def addPiece(catalog, piece):
+    lt.addLast(catalog['pieces'], piece)
+
+    department = piece['Department']
+    addDepartment(catalog, department, piece)
+
+def addDepartment(catalog, departmentName, piece):
+    departmentsList = catalog['departments']
+    posDepartment = lt.isPresent(departmentsList, departmentName)
+    if posDepartment > 0:
+        department = lt.getElement(departmentsList, posDepartment)
+    else:
+        department = newDepartment(departmentName)
+        lt.addLast(departmentsList, department)
+    lt.addLast(department['pieces'], piece['Title'])
+
+def addArtist(catalog, artist):
+    lt.addLast(catalog['artists'], artist)
 
 # Funciones para creacion de datos
+def newDepartment(name):
+    department = {'name': "", 'pieces': None}
+    department['name'] = name
+    department['pieces'] = lt.newList('ARRAY_LIST')
+    return department
 
 # Funciones de consulta
 
 # Funciones utilizadas para comparar elementos dentro de una lista
+def comparedepartments(department1, department2):
+    if (department1.lower() in department2['name'].lower()):
+        return 0
+    return -1
 
 # Funciones de ordenamiento

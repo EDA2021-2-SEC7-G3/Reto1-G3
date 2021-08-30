@@ -36,8 +36,37 @@ operación solicitada
 
 def printMenu():
     print("Bienvenido")
-    print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("1- Cargar información al catálogo")
+    print("2- Listar cronológicamente los artistas")
+    print("3- Listar cronológicamente las adquisiciones")
+    print("4- Clasificar las obras de un artista por técnica")
+    print("5- Clasificar las obras por la nacionalidad de sus creadores")
+
+def initCatalog():
+    return controller.initCatalog()
+
+def loadData(catalog):
+    controller.loadData(catalog)
+
+def lastThreeArtists(catalog, size):
+    printAuthorData(catalog['artists']['elements'][size - 3])
+    printAuthorData(catalog['artists']['elements'][size - 2])
+    printAuthorData(catalog['artists']['elements'][size - 1])
+
+def printAuthorData(author):
+    print('Nombre del autor: ' + author['DisplayName'])
+    print('Nacionalidad: ' + author['Nationality'])
+    print('Género: ' + author['Gender'] + '\n')
+
+def lastThreePieces(catalog, size):
+    printPieceData(catalog['pieces']['elements'][size - 3])
+    printPieceData(catalog['pieces']['elements'][size - 2])
+    printPieceData(catalog['pieces']['elements'][size - 1])
+
+def printPieceData(piece):
+    print('Título de la obra: ' + piece['Title'])
+    print('Tipo de obra: ' + piece['Classification'])
+    print('Departamento: ' + piece['Department'] + '\n')
 
 catalog = None
 
@@ -49,6 +78,17 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
+        catalog = initCatalog()
+        loadData(catalog)
+        piecesAmmount = lt.size(catalog['pieces'])
+        artistsAmmount = lt.size(catalog['artists'])
+        print('Obras cargadas: ' + str(piecesAmmount))
+        print('Últimas tres obras: \n')
+        print(lastThreePieces(catalog, piecesAmmount))
+        print('Artistas cargados: ' + str(artistsAmmount))
+        print('Últimos tres artistas: \n')
+        print(lastThreeArtists(catalog, artistsAmmount))
+        print('Departamentos existentes cargados: ' + str(lt.size(catalog['departments'])))
 
     elif int(inputs[0]) == 2:
         pass
