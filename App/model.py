@@ -121,6 +121,8 @@ def classifyByTechnique(catalog, authorName):
             lt.addLast(ans2['techniques'], technique)
         lt.addLast(ans2['techniques']['elements']['pieces'], piece)
 
+    for cont in range(0, lt.size(ans2['techniques'])):
+        
     
 
 # Funciones utilizadas para comparar elementos dentro de una lista
