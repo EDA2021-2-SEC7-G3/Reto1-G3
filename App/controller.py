@@ -38,6 +38,7 @@ def initCatalog():
 def loadData(catalog):
     loadPieces(catalog)
     loadArtists(catalog)
+    sortArtists(catalog)
 
 def loadPieces(catalog):
     piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-large.csv'
@@ -53,4 +54,13 @@ def loadArtists(catalog):
 
 # Funciones de ordenamiento
 
+def sortArtists(catalog):
+    model.sortArtists(catalog)
+
 # Funciones de consulta sobre el catálogo
+
+def listChronologically(catalog, stYear, fnYear):
+    return model.listChronologically(catalog, stYear, fnYear)
+
+def classifyByTechnique(catalog, authorName):
+    return model.classifyByTechnique(authorName)

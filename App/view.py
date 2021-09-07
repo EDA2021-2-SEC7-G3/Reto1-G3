@@ -48,17 +48,28 @@ def initCatalog():
 def loadData(catalog):
     controller.loadData(catalog)
 
-def lastThreeArtists(catalog, size):
+def firstThreeArtists(artists, size):
+    printAuthorData(artists['elements'][1])
+    printAuthorData(artists['elements'][2])
+    printAuthorData(artists['elements'][3])
+
+def lastThreeArtists(artists, size):
+    printAuthorData(artists['elements'][size - 3])
+    printAuthorData(artists['elements'][size - 2])
+    printAuthorData(artists['elements'][size - 3])
+
+def lastThreeArtistsOnCatalog(catalog, size):
     printAuthorData(catalog['artists']['elements'][size - 3])
     printAuthorData(catalog['artists']['elements'][size - 2])
     printAuthorData(catalog['artists']['elements'][size - 1])
 
 def printAuthorData(author):
     print('Nombre del autor: ' + author['DisplayName'])
+    print('Año de nacimiento: ' + author['BeginDate'])
     print('Nacionalidad: ' + author['Nationality'])
     print('Género: ' + author['Gender'] + '\n')
 
-def lastThreePieces(catalog, size):
+def lastThreePiecesOnCatalog(catalog, size):
     printPieceData(catalog['pieces']['elements'][size - 3])
     printPieceData(catalog['pieces']['elements'][size - 2])
     printPieceData(catalog['pieces']['elements'][size - 1])
@@ -67,6 +78,12 @@ def printPieceData(piece):
     print('Título de la obra: ' + piece['Title'])
     print('Tipo de obra: ' + piece['Classification'])
     print('Departamento: ' + piece['Department'] + '\n')
+
+def printDatabyTechnique(piece):
+    print('Título de la obra: ' + piece['Title'])
+    print('Fecha de la obra: ' + piece['Date'])
+    print('Medio: ' + piece['Medium'])
+    print('Dimensiones: ' + piece['Dimensions'])
 
 catalog = None
 
@@ -84,14 +101,28 @@ while True:
         artistsAmmount = lt.size(catalog['artists'])
         print('Obras cargadas: ' + str(piecesAmmount))
         print('Últimas tres obras: \n')
-        print(lastThreePieces(catalog, piecesAmmount))
+        print(lastThreePiecesOnCatalog(catalog, piecesAmmount))
         print('Artistas cargados: ' + str(artistsAmmount))
         print('Últimos tres artistas: \n')
-        print(lastThreeArtists(catalog, artistsAmmount))
+        print(lastThreeArtistsOnCatalog(catalog, artistsAmmount))
         print('Departamentos existentes cargados: ' + str(lt.size(catalog['departments'])))
 
     elif int(inputs[0]) == 2:
-        pass
+        stYear = input("¿Desde qué año desea empezar a hacer la búsqueda? ")
+        fnYear = input("¿Hasta qúe año? ")
+        answer = controller.listChronologically(catalog, stYear, fnYear)
+        
+        listSize = lt.size(answer)
+        print('Cantidad total de artistas en el rango: ' + str(listSize) + '\n')
+        print('Primeros 3 artistas en el rango: ' + '\n')
+        print(firstThreeArtists(answer, listSize))
+        print('Últimos 3 artistas en el rango: ' + '\n')
+        print(lastThreeArtists(answer, listSize))
+
+    elif int(inputs[0]) == 4:
+        authorName = input('¿Qué artista desea clasificar? ')
+        answer = controller.classifyByTechnique(catalog, authorName)
+
 
     else:
         sys.exit(0)
