@@ -77,10 +77,63 @@ def newDepartment(name):
 
 # Funciones de consulta
 
+def listChronologically(catalog, stYear, fnYear):
+    artistsFromCatalog = catalog['artists']['elements']
+    aFCSize = lt.size(catalog['artists'])
+    artistList = lt.newList('ARRAY_LIST')
+
+    for cont in range(0, aFCSize):
+        artist = (artistsFromCatalog[cont])
+        if (artist['BeginDate'] >= stYear) and (artist['BeginDate'] <= fnYear):
+            lt.addLast(artistList, artist)
+
+    return artistList
+
+def classifyByTechnique(catalog, authorName):
+    authorPos = lt.isPresent(catalog['artists'], authorName)
+    author = lt.getElement(catalog['artists'], authorPos)
+    authorID = author['ConstituentID']
+
+    piecesFromCatalog = catalog['pieces']['elements']
+    pFCSize = int(len(piecesFromCatalog))
+
+    piecesAndTechniques = {'allPieces': lt.newList('ARRAY_LIST'), 'allTechniques': lt.newList('ARRAY_LIST')}
+    
+    for cont in range (0, pFCSize):
+        piece = (piecesFromCatalog[cont])
+        if authorID in piece['ConstituentID']:
+            lt.addLast(piecesAndTechniques['allPieces'], piece)
+            if piece['Medium'] not in piecesAndTechniques['allTechniques']['elements']:
+                lt.addLast(piecesAndTechniques['allTechniques'], piece['Medium'])
+
+    piecesSize = lt.size(piecesAndTechniques['allPieces'])
+    techniquesSize = lt.size(piecesAndTechniques['allTechniques'])
+    ans1 = piecesSize, techniquesSize
+    ans2 = {'techniques': lt.newList('ARRAY_LIST')}
+
+    for cont in range(0, piecesSize):
+        piece = piecesAndTechniques['allPieces']['elements'][cont]
+        posTechnique = lt.isPresent(ans2['techniques'], piece['Medium'])
+        if posTechnique > 0:
+            technique = lt.getElement(ans2['techniques'], posTechnique)
+        else:
+            technique = newDepartment(piece['Medium'])
+            lt.addLast(ans2['techniques'], technique)
+        lt.addLast(ans2['techniques']['elements']['pieces'], piece)
+
+    for cont in range(0, lt.size(ans2['techniques'])):
+        
+    
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 def comparedepartments(department1, department2):
     if (department1.lower() in department2['name'].lower()):
         return 0
     return -1
 
+def comparebirthday(firstArtist, secondArtist):
+    return (int(firstArtist['BeginDate']) < int(secondArtist['BeginDate']))
+
 # Funciones de ordenamiento
+def sortArtists(catalog):
+    sa.sort(catalog['artists'], comparebirthday)
