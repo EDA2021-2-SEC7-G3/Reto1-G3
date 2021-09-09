@@ -51,7 +51,6 @@ def newCatalog():
 # Funciones para agregar informacion al catalogo
 def addPiece(catalog, piece):
     lt.addLast(catalog['pieces'], piece)
-
     department = piece['Department']
     addDepartment(catalog, department, piece)
 
@@ -75,59 +74,58 @@ def newDepartment(name):
     department['pieces'] = lt.newList('ARRAY_LIST')
     return department
 
+def newTechnique(name):
+    technique = {'name': "", 'pieces': None}
+    technique['name'] = name
+    technique['pieces'] = lt.newList('ARRAY_LIST')
+    return technique
+
 # Funciones de consulta
-
 def listChronologically(catalog, stYear, fnYear):
-    artistsFromCatalog = catalog['artists']['elements']
-    aFCSize = lt.size(catalog['artists'])
     artistList = lt.newList('ARRAY_LIST')
-
-    for cont in range(0, aFCSize):
-        artist = (artistsFromCatalog[cont])
+    for artist in lt.iterator(catalog['artists']):
         if (artist['BeginDate'] >= stYear) and (artist['BeginDate'] <= fnYear):
             lt.addLast(artistList, artist)
-
     return artistList
 
 def classifyByTechnique(catalog, authorName):
-    authorPos = lt.isPresent(catalog['artists'], authorName)
-    author = lt.getElement(catalog['artists'], authorPos)
-    authorID = author['ConstituentID']
-
-    piecesFromCatalog = catalog['pieces']['elements']
-    pFCSize = int(len(piecesFromCatalog))
-
-    piecesAndTechniques = {'allPieces': lt.newList('ARRAY_LIST'), 'allTechniques': lt.newList('ARRAY_LIST')}
-    
-    for cont in range (0, pFCSize):
-        piece = (piecesFromCatalog[cont])
+    authorID = None
+    for artist in lt.iterator(catalog['artists']):
+        if artist['DisplayName'] == authorName:
+            authorID = artist['ConstituentID']
+    piecesByTechniques = {'techniques': None}
+    piecesByTechniques['techniques'] = lt.newList('ARRAY_LIST', cmpfunction=comparetechniques)
+    for piece in lt.iterator(catalog['pieces']):
         if authorID in piece['ConstituentID']:
-            lt.addLast(piecesAndTechniques['allPieces'], piece)
-            if piece['Medium'] not in piecesAndTechniques['allTechniques']['elements']:
-                lt.addLast(piecesAndTechniques['allTechniques'], piece['Medium'])
+            techniquePos = lt.isPresent(piecesByTechniques['techniques'], piece['Medium'])
+            if techniquePos > 0:
+                technique = lt.getElement(piecesByTechniques['techniques'], techniquePos)
+            else:
+                technique = newTechnique(piece['Medium'])
+                lt.addLast(piecesByTechniques['techniques'], technique)
+            lt.addLast(technique['pieces'], piece)
+    totalPieces = 0
+    totalTechniques = lt.size(piecesByTechniques['techniques'])
+    mostUsedTechnique = {'name': None, 'piecesList': None, 'mostPieces': 0}
+    for technique in lt.iterator(piecesByTechniques['techniques']):
+        ammPieces = lt.size(technique['pieces'])
+        totalPieces += ammPieces
+        if ammPieces > mostUsedTechnique['mostPieces']:
+            mostUsedTechnique['name'] = technique['name']
+            mostUsedTechnique['piecesList'] = technique['pieces']
+            mostUsedTechnique['mostPieces'] = ammPieces
 
-    piecesSize = lt.size(piecesAndTechniques['allPieces'])
-    techniquesSize = lt.size(piecesAndTechniques['allTechniques'])
-    ans1 = piecesSize, techniquesSize
-    ans2 = {'techniques': lt.newList('ARRAY_LIST')}
+    return totalPieces, totalTechniques, mostUsedTechnique['name'], mostUsedTechnique['piecesList']
 
-    for cont in range(0, piecesSize):
-        piece = piecesAndTechniques['allPieces']['elements'][cont]
-        posTechnique = lt.isPresent(ans2['techniques'], piece['Medium'])
-        if posTechnique > 0:
-            technique = lt.getElement(ans2['techniques'], posTechnique)
-        else:
-            technique = newDepartment(piece['Medium'])
-            lt.addLast(ans2['techniques'], technique)
-        lt.addLast(ans2['techniques']['elements']['pieces'], piece)
-
-    for cont in range(0, lt.size(ans2['techniques'])):
-        
-    
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 def comparedepartments(department1, department2):
     if (department1.lower() in department2['name'].lower()):
+        return 0
+    return -1
+
+def comparetechniques(technique1, technique2):
+    if (technique1.lower() in technique2['name'].lower()):
         return 0
     return -1
 

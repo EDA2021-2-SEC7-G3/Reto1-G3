@@ -63,4 +63,4 @@ def listChronologically(catalog, stYear, fnYear):
     return model.listChronologically(catalog, stYear, fnYear)
 
 def classifyByTechnique(catalog, authorName):
-    return model.classifyByTechnique(authorName)
+    return model.classifyByTechnique(catalog, authorName)

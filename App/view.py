@@ -79,11 +79,12 @@ def printPieceData(piece):
     print('Tipo de obra: ' + piece['Classification'])
     print('Departamento: ' + piece['Department'] + '\n')
 
-def printDatabyTechnique(piece):
-    print('Título de la obra: ' + piece['Title'])
-    print('Fecha de la obra: ' + piece['Date'])
-    print('Medio: ' + piece['Medium'])
-    print('Dimensiones: ' + piece['Dimensions'])
+def printDatabyTechnique(piecesList):
+    for piece in lt.iterator(piecesList):
+        print('Título de la obra: ' + piece['Title'])
+        print('Fecha de la obra: ' + piece['Date'])
+        print('Medio: ' + piece['Medium'])
+        print('Dimensiones: ' + piece['Dimensions'] + '\n')
 
 catalog = None
 
@@ -122,7 +123,11 @@ while True:
     elif int(inputs[0]) == 4:
         authorName = input('¿Qué artista desea clasificar? ')
         answer = controller.classifyByTechnique(catalog, authorName)
-
+        print('Se tienen un total de ' + str(answer[0]) + ' obras del autor en el museo')
+        print('El artista hizo uso de ' + str(answer[1]) + ' técnica(s) en estas obras')
+        print('Su técnica más usada fue: ' + answer[2])
+        print('Esta es la lista de obras en las que usó dicha técnica: \n')
+        print(printDatabyTechnique(answer[3]))
 
     else:
         sys.exit(0)
