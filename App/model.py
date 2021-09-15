@@ -50,10 +50,36 @@ def newCatalog():
                
 # Funciones para agregar informacion al catalogo
 def addPiece(catalog, piece):
+    
     lt.addLast(catalog['pieces'], piece)
     department = piece['Department']
     addDepartment(catalog, department, piece)
 
+def fixdatePieces(piecelist):
+    stringprev = str(piecelist['DateAcquired'])
+    year = stringprev[0:4]
+    if type(year) == int:
+        year = int(year)
+    if len(stringprev) == 6:
+        if type(stringprev[5])==int:
+            month = int(stringprev[5])*0.1
+            year = year + month
+    if len(stringprev) == 7:
+        if type(stringprev[6])==int:
+            monthd = int(stringprev[6])*0.01
+            year = year + monthd
+    if len(stringprev) == 9:
+        if type(stringprev[8])==int:
+            day = int(stringprev[8])*0.001
+            year = year + day
+    if len(stringprev) == 10:
+        if type(stringprev[9])==int:
+            dayd = int(stringprev[9])*0.0001
+            year = year + dayd
+    if len(stringprev)==0:
+        year = 0
+    piecelist['DateAcquired']=int(year)
+    return piecelist
 def addDepartment(catalog, departmentName, piece):
     departmentsList = catalog['departments']
     posDepartment = lt.isPresent(departmentsList, departmentName)
@@ -80,6 +106,13 @@ def newTechnique(name):
     technique['pieces'] = lt.newList('ARRAY_LIST')
     return technique
 
+def countP(piece, i):
+    
+    if 'Purchase' in piece['CreditLine']:
+        i+=1
+    return i
+
+
 # Funciones de consulta
 def listChronologically(catalog, stYear, fnYear):
     artistList = lt.newList('ARRAY_LIST')
@@ -87,6 +120,13 @@ def listChronologically(catalog, stYear, fnYear):
         if (artist['BeginDate'] >= stYear) and (artist['BeginDate'] <= fnYear):
             lt.addLast(artistList, artist)
     return artistList
+
+def listChronologicallypieces(catalog, beginingyr, endingyr):
+    piecesList = lt.newList('ARRAY_LIST')
+    for piece in lt.iterator(catalog['pieces']):
+        if (piece['DateAcquired'] >= beginingyr) and (piece['DateAcquired'] <= endingyr):
+            lt.addLast(piecesList, piece)
+    return piecesList
 
 def classifyByTechnique(catalog, authorName):
     authorID = None
@@ -132,6 +172,18 @@ def comparetechniques(technique1, technique2):
 def comparebirthday(firstArtist, secondArtist):
     return (int(firstArtist['BeginDate']) < int(secondArtist['BeginDate']))
 
+def comparedate(firstyear, secondyear):
+ 
+    return (int(firstyear['DateAcquired']) < int(secondyear['DateAcquired']))
+
+
+
 # Funciones de ordenamiento
 def sortArtists(catalog):
     sa.sort(catalog['artists'], comparebirthday)
+
+
+
+def sortPieces(catalog):
+    sa.sort(catalog['pieces'], comparedate)
+    

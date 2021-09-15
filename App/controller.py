@@ -39,13 +39,71 @@ def loadData(catalog):
     loadPieces(catalog)
     loadArtists(catalog)
     sortArtists(catalog)
+    sortPieces(catalog)
+    
 
 def loadPieces(catalog):
     piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-large.csv'
     input_file = csv.DictReader(open(piecesfile, encoding='utf-8'))
     for piece in input_file:
-        model.addPiece(catalog, piece)
+        piece = model.fixdatePieces(piece)
+        model.addPiece(catalog, piece)   
+        
+
+def countPurchase():
+    piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-large.csv'
+    input_file = csv.DictReader(open(piecesfile, encoding='utf-8'))
+    i=0
+    for piece in input_file:
+        i = model.countP(piece, i)
     
+    return int(i)
+
+#'''''
+def compareid(uno, dos, tres, menostres, menosdos, menosuno):
+    artistsfile = cf.data_dir + 'MoMA/Artists-utf8-large.csv'
+    input_file = csv.DictReader(open(artistsfile, encoding='utf-8'))
+    dicnombres = {}
+    
+    for artist in input_file:
+       
+        if (uno == artist["ConstituentID"]):
+            
+            dictemp = {'uno':artist["DisplayName"]}
+            dicnombres.update(dictemp)
+        
+    
+        if (dos == artist["ConstituentID"]):
+            
+            dictemp = {'dos':artist["DisplayName"]}
+            dicnombres.update(dictemp)
+   
+        if (tres == artist["ConstituentID"]):
+            
+            dictemp = {'tres':artist["DisplayName"]}
+            dicnombres.update(dictemp)
+        if (menostres == artist["ConstituentID"]):
+           
+            dictemp = {'menostres':artist["DisplayName"]}
+            dicnombres.update(dictemp)
+        if (menosdos == artist["ConstituentID"]):
+           
+            dictemp = {'menosdos':artist["DisplayName"]}
+            dicnombres.update(dictemp)
+        if (menosuno == artist["ConstituentID"]):
+            
+            dictemp = {'menosuno':artist["DisplayName"]}
+            dicnombres.update(dictemp)
+            #'''
+    return dicnombres
+
+def reemplazar(uno):
+    uno = str(uno["ConstituentID"]).replace("[",'')
+    uno =uno.replace(']', '')
+    return uno
+    #'''    
+
+
 def loadArtists(catalog):
     artistsfile = cf.data_dir + 'MoMA/Artists-utf8-large.csv'
     input_file = csv.DictReader(open(artistsfile, encoding='utf-8'))
@@ -57,7 +115,13 @@ def loadArtists(catalog):
 def sortArtists(catalog):
     model.sortArtists(catalog)
 
+def sortPieces(catalog):
+    model.sortPieces(catalog)
+
+
 # Funciones de consulta sobre el catálogo
+def listChronologicallypieces(catalog, beginingyr, endingyr):
+    return model.listChronologicallypieces(catalog, beginingyr, endingyr)
 
 def listChronologically(catalog, stYear, fnYear):
     return model.listChronologically(catalog, stYear, fnYear)

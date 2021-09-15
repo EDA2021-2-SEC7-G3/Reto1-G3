@@ -69,13 +69,66 @@ def printAuthorData(author):
     print('Nacionalidad: ' + author['Nationality'])
     print('Género: ' + author['Gender'] + '\n')
 
-def lastThreePiecesOnCatalog(catalog, size):
-    printPieceData(catalog['pieces']['elements'][size - 3])
-    printPieceData(catalog['pieces']['elements'][size - 2])
-    printPieceData(catalog['pieces']['elements'][size - 1])
+def firstThreePieces(result, listsize):
+    printPieceData(result['elements'][1], result,listsize, 'uno')
+    printPieceData(result['elements'][2], result,listsize,'dos')
+    printPieceData(result['elements'][3], result,listsize,'tres')
 
-def printPieceData(piece):
+def lastThreePieces(result, listsize):
+    printPieceData(result['elements'][listsize-3],result,listsize, 'menostres')
+    printPieceData(result['elements'][listsize-2], result,listsize,'menosdos')
+    printPieceData(result['elements'][listsize-1], result,listsize,'menosuno')
+
+#''''
+def PiecesID(result, listsize, parametro):
+    uno = result['elements'][1]
+    dos = result['elements'][2]
+    tres = result['elements'][3]
+    menostres = result['elements'][listsize-3]
+    menosdos = result['elements'][listsize-2]
+    menosuno = result['elements'][listsize-1]
+
+    uno = controller.reemplazar(uno)
+    dos = controller.reemplazar(dos)
+    tres = controller.reemplazar(tres)
+    menostres = controller.reemplazar(menostres)
+    menosdos = controller.reemplazar(menosdos)
+    menosuno = controller.reemplazar(menosuno)
+  
+    #print(controller.compareid(uno, dos, tres, menostres, menosdos, menosuno))
+    printname((controller.compareid(uno, dos, tres, menostres, menosdos, menosuno)), parametro)
+
+def printname(dict,parametro):  
+    print(dict[parametro])
+
+
+#'''
+def lastThreePiecesOnCatalog(catalog, size):
+    printPieceDat(catalog['pieces']['elements'][size - 3])
+    printPieceDat(catalog['pieces']['elements'][size - 2])
+    printPieceDat(catalog['pieces']['elements'][size - 1])
+
+def printPieceData(piece, result, listsize, param):
     print('Título de la obra: ' + piece['Title'])
+    print('Artista: ') 
+    PiecesID(result, listsize, param)
+    print('Fecha: ' + piece['Date'])
+    print('Medio: ' + piece['Medium'] + '\n')
+    print('Dimensiones: ' + '\n' ) 
+    print('Circunferecnia: ' + str(piece['Circumference (cm)']) )
+    print('Profundidad: ' + str(piece['Depth (cm)']))
+    print('Diametro: ' +str(piece['Diameter (cm)']) )
+    print('Altura: ' + str(piece['Height (cm)']))
+    print('Longitud: ' + str(piece['Length (cm)']))
+    print("Peso: " + str(piece['Weight (kg)']))
+    print("Ancho: "+ str(piece['Width (cm)'])+ '\n'+ '\n' )
+    
+
+
+
+def printPieceDat(piece):
+    print('Título de la obra: ' + piece['Title'])
+   
     print('Tipo de obra: ' + piece['Classification'])
     print('Departamento: ' + piece['Department'] + '\n')
 
@@ -88,6 +141,8 @@ def printDatabyTechnique(piecesList):
 
 catalog = None
 
+def countPurchase():
+    print(controller.countPurchase())
 """
 Menu principal
 """
@@ -119,6 +174,27 @@ while True:
         print(firstThreeArtists(answer, listSize))
         print('Últimos 3 artistas en el rango: ' + '\n')
         print(lastThreeArtists(answer, listSize))
+
+
+    elif int(inputs[0]) == 3:
+        beginingyr = int(input("¿Desde qué año desea empezar a hacer la búsqueda? "))
+        endingyr = int(input("¿Hasta qúe año? "))
+        unsortedresult = controller.listChronologicallypieces(catalog, beginingyr, endingyr)
+        
+        listSize = lt.size(unsortedresult)
+        
+        #PiecesID(unsortedresult, listSize, "uno")
+        #''''
+        print('Cantidad total de piezas en el rango: ' + str(listSize) + '\n')
+        print('Cantidad de obras adquiridas mediante compra: ')
+        comprados = countPurchase()
+    
+        print('Primeras 3 obras adquiridas en el rango: ' + '\n')
+        print(firstThreePieces(unsortedresult, listSize))
+        
+        print('Últimas 3 piezas adquiridas en el rango: ' + '\n')
+        print(lastThreePieces(unsortedresult, listSize))
+        #'''
 
     elif int(inputs[0]) == 4:
         authorName = input('¿Qué artista desea clasificar? ')
