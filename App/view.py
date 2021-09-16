@@ -103,8 +103,6 @@ def PiecesID(result, listsize, parametro):
 def printname(dict,parametro):  
     print(dict[parametro])
 
-
-#'''
 def lastThreePiecesOnCatalog(catalog, size):
     printPieceDat(catalog['pieces']['elements'][size - 3])
     printPieceDat(catalog['pieces']['elements'][size - 2])
@@ -124,9 +122,6 @@ def printPieceData(piece, result, listsize, param):
     print('Longitud: ' + str(piece['Length (cm)']))
     print("Peso: " + str(piece['Weight (kg)']))
     print("Ancho: "+ str(piece['Width (cm)'])+ '\n'+ '\n' )
-    
-
-
 
 def printPieceDat(piece):
     print('Título de la obra: ' + piece['Title'])
