@@ -30,21 +30,21 @@ El controlador se encarga de mediar entre la vista y el modelo.
 """
 
 # Inicialización del Catálogo de libros
-def initCatalog():
-    catalog = model.newCatalog()
+def initCatalog(listType):
+    catalog = model.newCatalog(listType)
     return catalog
 
 # Funciones para la carga de datos
-def loadData(catalog):
-    loadPieces(catalog)
+def loadData(catalog, listType):
+    loadPieces(catalog, listType)
     loadArtists(catalog)
     sortArtists(catalog)
 
-def loadPieces(catalog):
+def loadPieces(catalog, listType):
     piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-large.csv'
     input_file = csv.DictReader(open(piecesfile, encoding='utf-8'))
     for piece in input_file:
-        model.addPiece(catalog, piece)
+        model.addPiece(catalog, piece, listType)
     
 def loadArtists(catalog):
     artistsfile = cf.data_dir + 'MoMA/Artists-utf8-large.csv'
@@ -59,8 +59,8 @@ def sortArtists(catalog):
 
 # Funciones de consulta sobre el catálogo
 
-def listChronologically(catalog, stYear, fnYear):
-    return model.listChronologically(catalog, stYear, fnYear)
+def listChronologically(catalog, stYear, fnYear, listType):
+    return model.listChronologically(catalog, stYear, fnYear, listType)
 
-def classifyByTechnique(catalog, authorName):
-    return model.classifyByTechnique(catalog, authorName)
+def classifyByTechnique(catalog, authorName, listType):
+    return model.classifyByTechnique(catalog, authorName, listType)

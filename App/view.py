@@ -42,11 +42,13 @@ def printMenu():
     print("4- Clasificar las obras de un artista por técnica")
     print("5- Clasificar las obras por la nacionalidad de sus creadores")
 
-def initCatalog():
-    return controller.initCatalog()
+listType = None
 
-def loadData(catalog):
-    controller.loadData(catalog)
+def initCatalog(listType):
+    return controller.initCatalog(listType)
+
+def loadData(catalog, listType):
+    controller.loadData(catalog, listType)
 
 def firstThreeArtists(artists, size):
     printAuthorData(artists['elements'][1])
@@ -95,9 +97,14 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
+        listType = input("¿Desea usar una lista basada en arreglo (1) o una lista simplemente encadenada (2)? ")
+        if listType == 1:
+            listType = 'ARRAY_LIST'
+        elif listType == 2:
+            listType == 'SINGLE_LINKED'
         print("Cargando información de los archivos ....")
-        catalog = initCatalog()
-        loadData(catalog)
+        catalog = initCatalog(listType)
+        loadData(catalog, listType)
         piecesAmmount = lt.size(catalog['pieces'])
         artistsAmmount = lt.size(catalog['artists'])
         print('Obras cargadas: ' + str(piecesAmmount))
@@ -111,7 +118,7 @@ while True:
     elif int(inputs[0]) == 2:
         stYear = input("¿Desde qué año desea empezar a hacer la búsqueda? ")
         fnYear = input("¿Hasta qúe año? ")
-        answer = controller.listChronologically(catalog, stYear, fnYear)
+        answer = controller.listChronologically(catalog, stYear, fnYear, listType)
         
         listSize = lt.size(answer)
         print('Cantidad total de artistas en el rango: ' + str(listSize) + '\n')
@@ -122,7 +129,7 @@ while True:
 
     elif int(inputs[0]) == 4:
         authorName = input('¿Qué artista desea clasificar? ')
-        answer = controller.classifyByTechnique(catalog, authorName)
+        answer = controller.classifyByTechnique(catalog, authorName, listType)
         print('Se tienen un total de ' + str(answer[0]) + ' obras del autor en el museo')
         print('El artista hizo uso de ' + str(answer[1]) + ' técnica(s) en estas obras')
         print('Su técnica más usada fue: ' + answer[2])
