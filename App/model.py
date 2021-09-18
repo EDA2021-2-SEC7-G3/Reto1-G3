@@ -28,6 +28,7 @@
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import mergesort as merge
 assert cf
 
 """
@@ -185,5 +186,5 @@ def sortArtists(catalog):
 
 
 def sortPieces(catalog):
-    sa.sort(catalog['pieces'], comparedate)
+    merge.sort(catalog['pieces'], comparedate)
     

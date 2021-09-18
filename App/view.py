@@ -70,10 +70,12 @@ def printAuthorData(author):
     print('Género: ' + author['Gender'] + '\n')
 
 def firstThreePieces(result, listsize):
+    #'''
     printPieceData(result['elements'][1], result,listsize, 'uno')
     printPieceData(result['elements'][2], result,listsize,'dos')
     printPieceData(result['elements'][3], result,listsize,'tres')
-
+    #'''
+    
 def lastThreePieces(result, listsize):
     printPieceData(result['elements'][listsize-3],result,listsize, 'menostres')
     printPieceData(result['elements'][listsize-2], result,listsize,'menosdos')
@@ -115,16 +117,8 @@ def printPieceData(piece, result, listsize, param):
     print('Fecha: ' + piece['Date'])
     print('Medio: ' + piece['Medium'] + '\n')
     print('Dimensiones: ' + '\n' ) 
-    print('Circunferecnia: ' + str(piece['Circumference (cm)']) )
-    print('Profundidad: ' + str(piece['Depth (cm)']))
-    print('Diametro: ' +str(piece['Diameter (cm)']) )
-    print('Altura: ' + str(piece['Height (cm)']))
-    print('Longitud: ' + str(piece['Length (cm)']))
-    print("Peso: " + str(piece['Weight (kg)']))
-    print("Ancho: "+ str(piece['Width (cm)'])+ '\n'+ '\n' )
-    
-
-
+    print(piece['Dimensions']+ '\n'+ '\n') 
+  
 
 def printPieceDat(piece):
     print('Título de la obra: ' + piece['Title'])
@@ -180,17 +174,16 @@ while True:
         beginingyr = int(input("¿Desde qué año desea empezar a hacer la búsqueda? "))
         endingyr = int(input("¿Hasta qúe año? "))
         unsortedresult = controller.listChronologicallypieces(catalog, beginingyr, endingyr)
-        
+
         listSize = lt.size(unsortedresult)
+        #print(unsortedresult['elements'][1]['Title'])
         
-        #PiecesID(unsortedresult, listSize, "uno")
-        #''''
         print('Cantidad total de piezas en el rango: ' + str(listSize) + '\n')
         print('Cantidad de obras adquiridas mediante compra: ')
         comprados = countPurchase()
-    
         print('Primeras 3 obras adquiridas en el rango: ' + '\n')
         print(firstThreePieces(unsortedresult, listSize))
+        #''''
         
         print('Últimas 3 piezas adquiridas en el rango: ' + '\n')
         print(lastThreePieces(unsortedresult, listSize))
