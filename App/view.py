@@ -147,12 +147,12 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
-        listType = input("¿Desea usar una lista basada en arreglo (1) o una lista simplemente encadenada (2)? ")
-        if listType == 1:
+        typeInput = input("¿Desea usar una lista basada en arreglo (1) o una lista simplemente encadenada (2)? ")
+        if int(typeInput) == 1:
             listType = 'ARRAY_LIST'
-        elif listType == 2:
-            listType == 'SINGLE_LINKED'
-        print("Cargando información de los archivos ....")
+        if int(typeInput) == 2:
+            listType = 'SINGLE_LINKED'
+        print("Cargando información de los archivos...")
         catalog = initCatalog(listType)
         loadData(catalog, listType)
         piecesAmmount = lt.size(catalog['pieces'])
