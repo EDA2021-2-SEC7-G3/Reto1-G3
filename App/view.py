@@ -83,28 +83,26 @@ def lastThreePieces(result, listsize):
 
 #''''
 def PiecesID(result, listsize, parametro):
-    uno = result['elements'][1]
-    dos = result['elements'][2]
-    tres = result['elements'][3]
-    menostres = result['elements'][listsize-3]
-    menosdos = result['elements'][listsize-2]
-    menosuno = result['elements'][listsize-1]
+    if parametro == 'uno':
+        uno = result['elements'][1]
+        IDS = controller.reemplazar(uno)
+    elif parametro == 'dos':
+        dos = result['elements'][2]
+        IDS = controller.reemplazar(dos)
+    elif parametro == 'tres':
+        tres = result['elements'][3]
+        IDS = controller.reemplazar(tres)
+    elif parametro == "menostres":
+        menostres = result['elements'][listsize-3]
+        IDS = controller.reemplazar(menostres)
+    elif parametro == "menosdos":
+        menosdos = result['elements'][listsize-2]
+        IDS = controller.reemplazar(menosdos)
+    elif parametro == "menosuno":    
+        menosuno = result['elements'][listsize-1]
+        IDS = controller.reemplazar(menosuno)
 
-    uno = controller.reemplazar(uno)
-    dos = controller.reemplazar(dos)
-    tres = controller.reemplazar(tres)
-    menostres = controller.reemplazar(menostres)
-    menosdos = controller.reemplazar(menosdos)
-    menosuno = controller.reemplazar(menosuno)
-    print(controller.varioslista(uno, 'uno'))
-    print(controller.varioslista(dos, 'dos'))
-    print(controller.compareid(controller.varioslista(uno, 'uno'), controller.varioslista(dos, 'dos'), controller.varioslista(tres, 'tres'), controller.varioslista(menostres, 'menostres'), controller.varioslista(menosdos, 'menosdos'), controller.varioslista(menosuno, 'menosuno')))
-    #printname(controller.compareid(controller.varioslista(uno, 'uno'), controller.varioslista(dos, 'dos'), controller.varioslista(tres, 'tres'), controller.varioslista(menostres, 'menostres'), controller.varioslista(menosdos, 'menosdos'), controller.varioslista(menosuno, 'menosuno')))
-
-def printname(dict):  
-    print(dict)
-
-
+    print(controller.compareid(controller.varioslista(IDS, parametro), parametro))
 #'''
 def lastThreePiecesOnCatalog(catalog, size):
     printPieceDat(catalog['pieces']['elements'][size - 3])
@@ -115,10 +113,9 @@ def printPieceData(piece, result, listsize, param):
     print('Título de la obra: ' + piece['Title'])
     print('Artista: ') 
     PiecesID(result, listsize, param)
-    print('Fecha adquirida: ' + str(piece['DateAcquired']))
     print('Fecha: ' + piece['Date'])
-    print('Medio: ' + piece['Medium'] + '\n')
-    print('Dimensiones: ' + '\n' ) 
+    print('Medio: ' + piece['Medium'])
+    print('Dimensiones: ') 
     print(piece['Dimensions']+ '\n'+ '\n') 
   
 
