@@ -96,12 +96,13 @@ def PiecesID(result, listsize, parametro):
     menostres = controller.reemplazar(menostres)
     menosdos = controller.reemplazar(menosdos)
     menosuno = controller.reemplazar(menosuno)
-  
-    #print(controller.compareid(uno, dos, tres, menostres, menosdos, menosuno))
-    printname((controller.compareid(uno, dos, tres, menostres, menosdos, menosuno)), parametro)
+    print(controller.varioslista(uno, 'uno'))
+    print(controller.varioslista(dos, 'dos'))
+    print(controller.compareid(controller.varioslista(uno, 'uno'), controller.varioslista(dos, 'dos'), controller.varioslista(tres, 'tres'), controller.varioslista(menostres, 'menostres'), controller.varioslista(menosdos, 'menosdos'), controller.varioslista(menosuno, 'menosuno')))
+    #printname(controller.compareid(controller.varioslista(uno, 'uno'), controller.varioslista(dos, 'dos'), controller.varioslista(tres, 'tres'), controller.varioslista(menostres, 'menostres'), controller.varioslista(menosdos, 'menosdos'), controller.varioslista(menosuno, 'menosuno')))
 
-def printname(dict,parametro):  
-    print(dict[parametro])
+def printname(dict):  
+    print(dict)
 
 
 #'''
@@ -114,6 +115,7 @@ def printPieceData(piece, result, listsize, param):
     print('Título de la obra: ' + piece['Title'])
     print('Artista: ') 
     PiecesID(result, listsize, param)
+    print('Fecha adquirida: ' + str(piece['DateAcquired']))
     print('Fecha: ' + piece['Date'])
     print('Medio: ' + piece['Medium'] + '\n')
     print('Dimensiones: ' + '\n' ) 
@@ -171,19 +173,23 @@ while True:
 
 
     elif int(inputs[0]) == 3:
-        beginingyr = int(input("¿Desde qué año desea empezar a hacer la búsqueda? "))
-        endingyr = int(input("¿Hasta qúe año? "))
+        beginingyrprev = str(input("¿Desde qué fecha desea empezar a hacer la búsqueda? "))
+        beginingyr = float(beginingyrprev[:7].replace("/",".") + beginingyrprev[8:10])
+        endingyrprev = str(input("¿Hasta qúe año?  "))
+        endingyr = float(endingyrprev[:7].replace("/",".") + beginingyrprev[8:10])
+        #print(catalog)
+        #'''
         unsortedresult = controller.listChronologicallypieces(catalog, beginingyr, endingyr)
 
         listSize = lt.size(unsortedresult)
-        #print(unsortedresult['elements'][1]['Title'])
+        print(str(unsortedresult['elements'][1]['Title']) + str(unsortedresult['elements'][1]['DateAcquired']))
         
         print('Cantidad total de piezas en el rango: ' + str(listSize) + '\n')
         print('Cantidad de obras adquiridas mediante compra: ')
         comprados = countPurchase()
         print('Primeras 3 obras adquiridas en el rango: ' + '\n')
         print(firstThreePieces(unsortedresult, listSize))
-        #''''
+        
         
         print('Últimas 3 piezas adquiridas en el rango: ' + '\n')
         print(lastThreePieces(unsortedresult, listSize))

@@ -30,7 +30,7 @@ from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.Algorithms.Sorting import mergesort as merge
 assert cf
-
+from decimal import Decimal
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
 los mismos.
@@ -57,29 +57,44 @@ def addPiece(catalog, piece):
     addDepartment(catalog, department, piece)
 
 def fixdatePieces(piecelist):
+    
     stringprev = str(piecelist['DateAcquired'])
-    year = stringprev[0:4]
-    if type(year) == int:
-        year = int(year)
-    if len(stringprev) == 6:
-        if type(stringprev[5])==int:
+    if (len(stringprev)==0):
+        piecelist['DateAcquired']=-1
+        return piecelist
+    i = "0123456789"
+    o=0
+    for n in stringprev[0:4]:
+        if n not in i:
+            piecelist['DateAcquired']=-1
+            return piecelist       
+    year = int(stringprev[0:4]) 
+
+    if len(stringprev) >= 6:
+        if stringprev[5] in i:
             month = int(stringprev[5])*0.1
-            year = year + month
-    if len(stringprev) == 7:
-        if type(stringprev[6])==int:
-            monthd = int(stringprev[6])*0.01
-            year = year + monthd
-    if len(stringprev) == 9:
-        if type(stringprev[8])==int:
-            day = int(stringprev[8])*0.001
-            year = year + day
-    if len(stringprev) == 10:
-        if type(stringprev[9])==int:
-            dayd = int(stringprev[9])*0.0001
-            year = year + dayd
-    if len(stringprev)==0:
-        year = 0
-    piecelist['DateAcquired']=int(year)
+            year = year + month 
+            
+            if len(stringprev) >= 7:
+                if stringprev[6] in i:
+                    monthd = int(stringprev[6])*0.01
+                    year = year + monthd
+                    
+                    #'''
+                    if len(stringprev) >= 9:
+                        if stringprev[8] in i:
+                            day = int(stringprev[8])*0.001
+                            year = year + day
+                            
+                            if len(stringprev) == 10:
+                                if stringprev[9] in i:
+                                    dayd = int(stringprev[9])
+                                    dayd = dayd*0.0001
+                                    year = year + dayd
+                                    year = round(year,4)
+                                    #return round(year,4)
+    #'''
+    piecelist['DateAcquired']=float(year)
     return piecelist
 def addDepartment(catalog, departmentName, piece):
     departmentsList = catalog['departments']

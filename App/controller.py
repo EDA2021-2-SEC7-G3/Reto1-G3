@@ -20,6 +20,7 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+#from typing_extensions import ParamSpecArgs
 import config as cf
 import model
 import csv
@@ -46,6 +47,7 @@ def loadPieces(catalog):
     piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-large.csv'
     input_file = csv.DictReader(open(piecesfile, encoding='utf-8'))
     for piece in input_file:
+        #print(model.fixdatePieces(piece))
         piece = model.fixdatePieces(piece)
         model.addPiece(catalog, piece)   
         
@@ -60,42 +62,55 @@ def countPurchase():
     return int(i)
 
 #'''''
-def compareid(uno, dos, tres, menostres, menosdos, menosuno):
+def compareid(paqueteuno, paquetedos, paquetetres, paquetemenostres, paquetemenosdos, paquetemenosuno):
     artistsfile = cf.data_dir + 'MoMA/Artists-utf8-large.csv'
     input_file = csv.DictReader(open(artistsfile, encoding='utf-8'))
     dicnombres = {}
-    
-    for artist in input_file:
-       
-        if (uno == artist["ConstituentID"]):
-            
-            dictemp = {'uno':artist["DisplayName"]}
-            dicnombres.update(dictemp)
+ 
         
-    
-        if (dos == artist["ConstituentID"]):
-            
-            dictemp = {'dos':artist["DisplayName"]}
-            dicnombres.update(dictemp)
+    #'''
+    for artist in input_file:
+        
+        auxiliarcompareid(paqueteuno,'uno', artist, dicnombres, input_file)
+        auxiliarcompareid(paquetedos,'dos', artist, dicnombres, input_file)
+      
+        auxiliarcompareid(paquetetres,'tres', artist, dicnombres, input_file)
+        auxiliarcompareid(paquetemenostres,'menostres', artist, dicnombres, input_file)
+        auxiliarcompareid(paquetemenosdos,'menosdos', artist, dicnombres, input_file)
+        auxiliarcompareid(paquetemenosuno,'menosuno', artist, dicnombres, input_file)
+        
+        #'''
    
-        if (tres == artist["ConstituentID"]):
-            
-            dictemp = {'tres':artist["DisplayName"]}
-            dicnombres.update(dictemp)
-        if (menostres == artist["ConstituentID"]):
-           
-            dictemp = {'menostres':artist["DisplayName"]}
-            dicnombres.update(dictemp)
-        if (menosdos == artist["ConstituentID"]):
-           
-            dictemp = {'menosdos':artist["DisplayName"]}
-            dicnombres.update(dictemp)
-        if (menosuno == artist["ConstituentID"]):
-            
-            dictemp = {'menosuno':artist["DisplayName"]}
-            dicnombres.update(dictemp)
-            #'''
     return dicnombres
+def auxiliarcompareid(numerodepaquete, param, artist, dicnombres, input_file):
+    if len(numerodepaquete[1]) != 0:
+        x = numerodepaquete[1][param]
+        
+        i = 0
+        for o in range(x):
+            if numerodepaquete[0][o] == artist["ConstituentID"]:
+                print('a')
+                dicnombres[param] = 'Artist1:' + artist["DisplayName"]+ '. '
+                i+=1
+               
+                
+            for artista2 in input_file:
+                if numerodepaquete[0][o] ==artista2["ConstituentID"] and artista2 != artist and i>=1:
+                    dicnombres[param] += 'Artist' + str(o)+': ' + artista2["DisplayName"]+ '. '
+                
+    else:
+        if numerodepaquete[0] == artist["ConstituentID"]:
+            dictemp = {param:artist["DisplayName"]}
+            dicnombres.update(dictemp)
+def varioslista (IDS, param):
+    ID = IDS
+    adicional = {}
+    if ", " in IDS:
+        ID = IDS.split(", ")
+        adicionalprev = {param: len(ID)}
+        adicional.update(adicionalprev)
+    
+    return ID, adicional
 
 def reemplazar(uno):
     uno = str(uno["ConstituentID"]).replace("[",'')
