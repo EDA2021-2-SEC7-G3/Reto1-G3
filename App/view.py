@@ -44,11 +44,11 @@ def printMenu():
 
 listType = None
 
-def initCatalog(listType):
-    return controller.initCatalog(listType)
+def initCatalog():
+    return controller.initCatalog()
 
-def loadData(catalog, listType):
-    controller.loadData(catalog, listType)
+def loadData(catalog):
+    controller.loadData(catalog)
 
 def firstThreeArtists(artists, size):
     printAuthorData(artists['elements'][1])

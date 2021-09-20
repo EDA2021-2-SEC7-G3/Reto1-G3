@@ -30,8 +30,8 @@ El controlador se encarga de mediar entre la vista y el modelo.
 """
 
 # Inicialización del Catálogo de libros
-def initCatalog(listType):
-    catalog = model.newCatalog(listType)
+def initCatalog():
+    catalog = model.newCatalog()
     return catalog
 
 # Funciones para la carga de datos
@@ -119,8 +119,8 @@ def sortPieces(catalog):
 def listChronologicallypieces(catalog, beginingyr, endingyr):
     return model.listChronologicallypieces(catalog, beginingyr, endingyr)
 
-def listChronologically(catalog, stYear, fnYear, listType):
-    return model.listChronologically(catalog, stYear, fnYear, listType)
+def listChronologically(catalog, stYear, fnYear):
+    return model.listChronologically(catalog, stYear, fnYear)
 
-def classifyByTechnique(catalog, authorName, listType):
-    return model.classifyByTechnique(catalog, authorName, listType)
+def classifyByTechnique(catalog, authorName):
+    return model.classifyByTechnique(catalog, authorName)

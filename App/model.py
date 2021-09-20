@@ -129,7 +129,7 @@ def classifyByTechnique(catalog, authorName):
             if techniquePos > 0:
                 technique = lt.getElement(piecesByTechniques['techniques'], techniquePos)
             else:
-                technique = newTechnique(piece['Medium'], 'ARRAY_LIST')
+                technique = newTechnique(piece['Medium'])
                 lt.addLast(piecesByTechniques['techniques'], technique)
             lt.addLast(technique['pieces'], piece)
     totalPieces = 0
