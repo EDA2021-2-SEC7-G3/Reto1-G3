@@ -128,6 +128,11 @@ def countP(piece, i):
         i+=1
     return i
 
+def modvarios(IDSU):
+    ID = IDSU
+    if ", " in IDSU:
+        ID = IDSU.split(", ")
+    return ID
 
 # Funciones de consulta
 def listChronologically(catalog, stYear, fnYear):
@@ -143,6 +148,21 @@ def listChronologicallypieces(catalog, beginingyr, endingyr):
         if (piece['DateAcquired'] >= beginingyr) and (piece['DateAcquired'] <= endingyr):
             lt.addLast(piecesList, piece)
     return piecesList
+
+def crearlista():
+    mayor = lt.newList('ARRAY_LIST')
+    return mayor
+
+def add(listaprev, file):
+    lt.addLast(listaprev, file)
+
+def crearsublistanacionalidades(input_file):
+    nacionalidades = lt.newList('ARRAY_LIST')
+    for artist in input_file:
+        if lt.isPresent(nacionalidades,artist["Nationality"])==0 :
+            lt.addLast(nacionalidades, artist["Nationality"])
+    return nacionalidades
+
 
 def classifyByTechnique(catalog, authorName):
     authorID = None

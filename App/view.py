@@ -191,6 +191,7 @@ while True:
         print('Últimas 3 piezas adquiridas en el rango: ' + '\n')
         print(lastThreePieces(unsortedresult, listSize))
         #'''
+    
 
     elif int(inputs[0]) == 4:
         authorName = input('¿Qué artista desea clasificar? ')
@@ -201,6 +202,10 @@ while True:
         print('Esta es la lista de obras en las que usó dicha técnica: \n')
         print(printDatabyTechnique(answer[3]))
 
+        
+    elif int(inputs[0])==5:
+        controller.base()
+        
     else:
         sys.exit(0)
 sys.exit(0)
