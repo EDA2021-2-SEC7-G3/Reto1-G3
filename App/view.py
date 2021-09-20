@@ -147,14 +147,9 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
-        typeInput = input("¿Desea usar una lista basada en arreglo (1) o una lista simplemente encadenada (2)? ")
-        if int(typeInput) == 1:
-            listType = 'ARRAY_LIST'
-        if int(typeInput) == 2:
-            listType = 'SINGLE_LINKED'
         print("Cargando información de los archivos...")
-        catalog = initCatalog(listType)
-        loadData(catalog, listType)
+        catalog = initCatalog()
+        loadData(catalog)
         piecesAmmount = lt.size(catalog['pieces'])
         artistsAmmount = lt.size(catalog['artists'])
         print('Obras cargadas: ' + str(piecesAmmount))
@@ -163,13 +158,12 @@ while True:
         print('Artistas cargados: ' + str(artistsAmmount))
         print('Últimos tres artistas: \n')
         print(lastThreeArtistsOnCatalog(catalog, artistsAmmount))
-        print('Departamentos existentes cargados: ' + str(lt.size(catalog['departments'])))
+        print('Departamentos existentes cargados: ' + str(lt.size(catalog['departments'])) + '\n')
 
     elif int(inputs[0]) == 2:
         stYear = input("¿Desde qué año desea empezar a hacer la búsqueda? ")
         fnYear = input("¿Hasta qúe año? ")
-        answer = controller.listChronologically(catalog, stYear, fnYear, listType)
-        
+        answer = controller.listChronologically(catalog, stYear, fnYear)
         listSize = lt.size(answer)
         print('Cantidad total de artistas en el rango: ' + str(listSize) + '\n')
         print('Primeros 3 artistas en el rango: ' + '\n')
@@ -200,7 +194,7 @@ while True:
 
     elif int(inputs[0]) == 4:
         authorName = input('¿Qué artista desea clasificar? ')
-        answer = controller.classifyByTechnique(catalog, authorName, listType)
+        answer = controller.classifyByTechnique(catalog, authorName)
         print('Se tienen un total de ' + str(answer[0]) + ' obras del autor en el museo')
         print('El artista hizo uso de ' + str(answer[1]) + ' técnica(s) en estas obras')
         print('Su técnica más usada fue: ' + answer[2])

@@ -36,21 +36,20 @@ los mismos.
 """
 
 # Construccion de modelos
-def newCatalog(listType):
+def newCatalog():
     catalog = {'pieces': None,
                'artists': None,
                'departments': None}
-    catalog['pieces'] = lt.newList(listType)
-    catalog['artists'] = lt.newList(listType)
-    catalog['departments'] = lt.newList(listType,
-                                        cmpfunction=comparedepartments)
+    catalog['pieces'] = lt.newList('ARRAY_LIST')
+    catalog['artists'] = lt.newList('ARRAY_LIST')
+    catalog['departments'] = lt.newList('ARRAY_LIST', cmpfunction=comparedepartments)
     return catalog
                
 # Funciones para agregar informacion al catalogo
-def addPiece(catalog, piece, listType):
+def addPiece(catalog, piece):
     lt.addLast(catalog['pieces'], piece)
     department = piece['Department']
-    addDepartment(catalog, department, piece, listType)
+    addDepartment(catalog, department, piece)
 
 def fixdatePieces(piecelist):
     stringprev = str(piecelist['DateAcquired'])
@@ -78,13 +77,13 @@ def fixdatePieces(piecelist):
     piecelist['DateAcquired']=int(year)
     return piecelist
 
-def addDepartment(catalog, departmentName, piece, listType):
+def addDepartment(catalog, departmentName, piece):
     departmentsList = catalog['departments']
     posDepartment = lt.isPresent(departmentsList, departmentName)
     if posDepartment > 0:
         department = lt.getElement(departmentsList, posDepartment)
     else:
-        department = newDepartment(departmentName, listType)
+        department = newDepartment(departmentName)
         lt.addLast(departmentsList, department)
     lt.addLast(department['pieces'], piece['Title'])
 
@@ -92,16 +91,16 @@ def addArtist(catalog, artist):
     lt.addLast(catalog['artists'], artist)
 
 # Funciones para creacion de datos
-def newDepartment(name, listType):
+def newDepartment(name):
     department = {'name': "", 'pieces': None}
     department['name'] = name
-    department['pieces'] = lt.newList(listType)
+    department['pieces'] = lt.newList('ARRAY_LIST')
     return department
 
-def newTechnique(name, listType):
+def newTechnique(name):
     technique = {'name': "", 'pieces': None}
     technique['name'] = name
-    technique['pieces'] = lt.newList(listType)
+    technique['pieces'] = lt.newList('ARRAY_LIST')
     return technique
 
 def countP(piece, i):
@@ -110,27 +109,27 @@ def countP(piece, i):
     return i
 
 # Funciones de consulta
-def listChronologically(catalog, stYear, fnYear, listType):
-    artistList = lt.newList(listType)
+def listChronologically(catalog, stYear, fnYear):
+    artistList = lt.newList('ARRAY_LIST')
     for artist in lt.iterator(catalog['artists']):
         if (artist['BeginDate'] >= stYear) and (artist['BeginDate'] <= fnYear):
             lt.addLast(artistList, artist)
     return artistList
 
-def classifyByTechnique(catalog, authorName, listType):
+def classifyByTechnique(catalog, authorName):
     authorID = None
     for artist in lt.iterator(catalog['artists']):
         if artist['DisplayName'] == authorName:
             authorID = artist['ConstituentID']
     piecesByTechniques = {'techniques': None}
-    piecesByTechniques['techniques'] = lt.newList(listType, cmpfunction=comparetechniques)
+    piecesByTechniques['techniques'] = lt.newList('ARRAY_LIST', cmpfunction=comparetechniques)
     for piece in lt.iterator(catalog['pieces']):
         if authorID in piece['ConstituentID']:
             techniquePos = lt.isPresent(piecesByTechniques['techniques'], piece['Medium'])
             if techniquePos > 0:
                 technique = lt.getElement(piecesByTechniques['techniques'], techniquePos)
             else:
-                technique = newTechnique(piece['Medium'])
+                technique = newTechnique(piece['Medium'], 'ARRAY_LIST')
                 lt.addLast(piecesByTechniques['techniques'], technique)
             lt.addLast(technique['pieces'], piece)
     totalPieces = 0

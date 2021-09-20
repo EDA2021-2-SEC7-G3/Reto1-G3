@@ -35,18 +35,18 @@ def initCatalog(listType):
     return catalog
 
 # Funciones para la carga de datos
-def loadData(catalog, listType):
-    loadPieces(catalog, listType)
+def loadData(catalog):
+    loadPieces(catalog)
     loadArtists(catalog)
     sortArtists(catalog)
     sortPieces(catalog)
     
-def loadPieces(catalog, listType):
+def loadPieces(catalog):
     piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-large.csv'
     input_file = csv.DictReader(open(piecesfile, encoding='utf-8'))
     for piece in input_file:
         piece = model.fixdatePieces(piece)
-        model.addPiece(catalog, piece, listType)   
+        model.addPiece(catalog, piece)   
         
 def countPurchase():
     piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-large.csv'
