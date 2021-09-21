@@ -204,8 +204,11 @@ while True:
 
         
     elif int(inputs[0])==5:
-        controller.base()
+        listaprev = controller.base()
+
+        print(listaprev)
         
     else:
         sys.exit(0)
 sys.exit(0)
+

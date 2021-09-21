@@ -56,6 +56,7 @@ def addPiece(catalog, piece):
     department = piece['Department']
     addDepartment(catalog, department, piece)
 
+
 def fixdatePieces(piecelist):
     
     stringprev = str(piecelist['DateAcquired'])
@@ -149,12 +150,27 @@ def listChronologicallypieces(catalog, beginingyr, endingyr):
             lt.addLast(piecesList, piece)
     return piecesList
 
+def iterator(list):
+    lt.iterator(list)
+
+def firstelement(sublist):
+    primerelemento = lt.firstElement(sublist)
+    return primerelemento
 def crearlista():
     mayor = lt.newList('ARRAY_LIST')
     return mayor
 
-def add(listaprev, file):
+def cargarfuncion(mayor, file_oc, file_ca, nacionalidades, nacionalidad):
+    sublista = crearlista()
+    ponerultimo(sublista, nacionalidad)
+    ponerultimo(mayor, sublista)
+    
+
+def ponerultimo(listaprev, file):
     lt.addLast(listaprev, file)
+
+def ponerprimero(listaprev, nacionalidad):
+    lt.addFirst(listaprev, nacionalidad)
 
 def crearsublistanacionalidades(input_file):
     nacionalidades = lt.newList('ARRAY_LIST')

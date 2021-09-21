@@ -84,18 +84,24 @@ def compareid(numerodepaquete,param):
     return nombres
 
 
-def loadinfo(IDS, piece, file_ca):
+def loadinfo(IDS, piece, file_ca, mayor):
     if type(IDS)==list:
         for artist in file_ca:
             for ID in IDS:
                 if ID == artist['ConstituentID']:
-                    infotemp= [artist["Nationality"], piece, ID, artist["DisplayName"]]
-                    return infotemp
+                    infotemp= [piece, artist["DisplayName"]]
+                    operacionesloadinfo(mayor, artist, infotemp)                        
     else:
         for artist in file_ca:
-            if IDS == artist['ConstituentID']:
-                infotemp= [artist["Nationality"], piece, IDS, artist["DisplayName"]]
-                return infotemp
+            if IDS == artist['ConstituentID']:  
+                infotemp= [piece, artist["DisplayName"]]
+                operacionesloadinfo(mayor, artist, infotemp)  
+
+def operacionesloadinfo(mayor, artist, infotemp):
+    for sublist in model.iterator(mayor):
+        if model.firstelement(sublist) == artist["Nationality"]:
+            model.ponerultimo(sublist, infotemp)
+    
 def varioslista (IDS, param):
     ID = IDS
     adicional = {}
@@ -123,15 +129,28 @@ def fileca():
 def base():
     file_oc = fileoc()
     file_ca = fileca()
-    listaprev = model.crearlista()
-    cargar(listaprev, file_oc, file_ca)
+    mayor = model.crearlista()
+    cargar(mayor, file_oc, file_ca)
+    return mayor
+def cargar(mayor, file_oc, file_ca):
+    nacionalidades = encontrarnacionalidades(file_ca) #encuentra nacionalidades
+    for nacionalidad in nacionalidades:
+        model.cargarfuncion(mayor, file_oc, file_ca, nacionalidades, nacionalidad)
+        
+        for piece in file_oc:
+            IDSU = reemplazar(piece) #reemplaza los []
+            IDS = model.modvarios(IDSU) #divide en lista los ID
+            loadinfo(IDS, piece, file_ca, mayor) #agrega piece info en sublista de la nacionalidad
+            #print(mayor)
     
-def cargar(listaprev, file_oc, file_ca):
-    for piece in file_oc:
-        IDSU = reemplazar(piece) #reemplaza los []
-        IDS = model.modvarios(IDSU) #divide en lista los ID
-        info = loadinfo(IDS, piece, file_ca) #retorna info para actualizar lista obra codigo autor (nacionalidad posicion 0)
-        model.add(listaprev, info)
+def encontrarnacionalidades(file_ca):
+    nacionalidades  =[]
+    for artist in file_ca:
+        if artist["Nationality"] not in nacionalidades:
+            nacionalidad =  artist["Nationality"]
+            nacionalidades.append(nacionalidad)
+    return nacionalidades
+        
 
 def loadArtists(catalog):
     artistsfile = cf.data_dir + 'MoMA/Artists-utf8-large.csv'
