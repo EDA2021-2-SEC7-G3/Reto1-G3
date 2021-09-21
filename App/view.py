@@ -164,12 +164,13 @@ while True:
         stYear = input("¿Desde qué año desea empezar a hacer la búsqueda? ")
         fnYear = input("¿Hasta qúe año? ")
         answer = controller.listChronologically(catalog, stYear, fnYear)
-        listSize = lt.size(answer)
+        listSize = lt.size(answer[0])
         print('Cantidad total de artistas en el rango: ' + str(listSize) + '\n')
         print('Primeros 3 artistas en el rango: ' + '\n')
-        print(firstThreeArtists(answer, listSize))
+        print(firstThreeArtists(answer[0], listSize))
         print('Últimos 3 artistas en el rango: ' + '\n')
-        print(lastThreeArtists(answer, listSize))
+        print(lastThreeArtists(answer[0], listSize))
+        print('El tiempo que se demoró en ejecutar fue de ' + str(answer[1]) + 'ms.')
 
 
     elif int(inputs[0]) == 3:
@@ -200,6 +201,7 @@ while True:
         print('Su técnica más usada fue: ' + answer[2])
         print('Esta es la lista de obras en las que usó dicha técnica: \n')
         print(printDatabyTechnique(answer[3]))
+        print('El tiempo que se demoró en ejecutar fue de ' + str(answer[4]) + 'ms.')
 
     else:
         sys.exit(0)

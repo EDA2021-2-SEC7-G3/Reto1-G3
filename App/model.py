@@ -29,6 +29,7 @@ import config as cf
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 assert cf
+import time
 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
@@ -110,13 +111,17 @@ def countP(piece, i):
 
 # Funciones de consulta
 def listChronologically(catalog, stYear, fnYear):
+    startTime = time.process_time()
     artistList = lt.newList('ARRAY_LIST')
     for artist in lt.iterator(catalog['artists']):
         if (artist['BeginDate'] >= stYear) and (artist['BeginDate'] <= fnYear):
             lt.addLast(artistList, artist)
-    return artistList
+    stopTime = time.process_time()
+    elapsedTime = (stopTime - startTime) * 1000
+    return artistList, elapsedTime
 
 def classifyByTechnique(catalog, authorName):
+    startTime = time.process_time()
     authorID = None
     for artist in lt.iterator(catalog['artists']):
         if artist['DisplayName'] == authorName:
@@ -142,8 +147,9 @@ def classifyByTechnique(catalog, authorName):
             mostUsedTechnique['name'] = technique['name']
             mostUsedTechnique['piecesList'] = technique['pieces']
             mostUsedTechnique['mostPieces'] = ammPieces
-
-    return totalPieces, totalTechniques, mostUsedTechnique['name'], mostUsedTechnique['piecesList']
+    stopTime = time.process_time()
+    elapsedTime = (stopTime - startTime) * 1000
+    return totalPieces, totalTechniques, mostUsedTechnique['name'], mostUsedTechnique['piecesList'], elapsedTime
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 def comparedepartments(department1, department2):
