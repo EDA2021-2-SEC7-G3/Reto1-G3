@@ -25,12 +25,14 @@
  """
 
 
+from DISClib.DataStructures.arraylist import getElement
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.Algorithms.Sorting import mergesort as merge
 assert cf
 from decimal import Decimal
+
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
 los mismos.
@@ -40,12 +42,14 @@ los mismos.
 def newCatalog():
     catalog = {'pieces': None,
                'artists': None,
-               'departments': None}
+               'departments': None,
+               'names':None}
     
     catalog['pieces'] = lt.newList('ARRAY_LIST')
     catalog['artists'] = lt.newList('ARRAY_LIST')
     catalog['departments'] = lt.newList('ARRAY_LIST',
                                         cmpfunction=comparedepartments)
+    catalog['names']={}
 
     return catalog
                
@@ -150,24 +154,9 @@ def listChronologicallypieces(catalog, beginingyr, endingyr):
             lt.addLast(piecesList, piece)
     return piecesList
 
-def iterator(list):
-    lt.iterator(list)
 
-def firstelement(sublist):
-    primerelemento = lt.firstElement(sublist)
-    return primerelemento
-def crearlista():
-    mayor = lt.newList('ARRAY_LIST')
-    return mayor
 
-def cargarfuncion(mayor, file_oc, file_ca, nacionalidades, nacionalidad):
-    sublista = crearlista()
-    ponerultimo(sublista, nacionalidad)
-    ponerultimo(mayor, sublista)
-    
 
-def ponerultimo(listaprev, file):
-    lt.addLast(listaprev, file)
 
 def ponerprimero(listaprev, nacionalidad):
     lt.addFirst(listaprev, nacionalidad)
@@ -238,4 +227,177 @@ def sortArtists(catalog):
 
 def sortPieces(catalog):
     merge.sort(catalog['pieces'], comparedate)
+
+def encontrarnacionalidades(catalog):
+    nacionalidades  = lt.newList('SINGLE_LINKED')
+    for artist in lt.iterator(catalog['artists']):
+        if  lt.isPresent(nacionalidades, artist["Nationality"]) == 0:
+            lt.addLast(nacionalidades, artist["Nationality"])
+    return nacionalidades
+
+def reemplazar(uno):
+
+    uno = str(uno["ConstituentID"]).replace("[",'')
+    uno =uno.replace(']', '')
+    return uno
+
+def cargar(nacionalidades, mayor, catalog):
+    for nacionalidad in lt.iterator(nacionalidades):
+        sublista = lt.newList('ARRAY_LIST')
+        lt.addLast(sublista, nacionalidad)
+        lt.addLast(mayor, sublista)
+        
+    for piece in lt.iterator(catalog['pieces']):
+        
+        IDSU = reemplazar(piece) #reemplaza los []
+        
+        IDS = modvarios(IDSU) #divide en lista los ID
+        
+        if type(IDS)==list:
+            for ID in IDS:
+              
+                for artist in lt.iterator(catalog['artists']):
+                   
+                    if ID == artist['ConstituentID']:
+                        
+                        infotemp= [piece, artist["DisplayName"]]
+                        operacionesloadinfo(mayor, artist, infotemp)    
+         
+        else:
+            for artist in lt.iterator(catalog['artists']):
+                if IDS == artist['ConstituentID']:  
+                    infotemp= [piece, artist["DisplayName"]]
+                    operacionesloadinfo(mayor, artist, infotemp)  
+        
+        
+                     
+def operacionesloadinfo(mayor, artist, infotemp):
+    o=0
+    for sublist in lt.iterator(mayor):
+        if lt.firstElement(sublist) == artist["Nationality"]:
+            i = 0
+            while o == 0:
+                for nacionality in lt.iterator(mayor):
+                    i+=1
+                    if nacionality == sublist:
+                        pos = i
+                        o +=1
+            lt.addLast(sublist, infotemp)
+            lt.changeInfo(mayor, pos, sublist)
+
+def encontrarmayores(mayor):
+    res = {}
+    merge.sort(mayor, ordenarnaciones)
+    paises10 = lt.subList(mayor, 1, 10)
+    for pais in lt.iterator(paises10):
+        restemp = {lt.firstElement(pais):(lt.size(pais)-1)}
+        res.update(restemp)
+    return res, paises10
+
+def ordenarnaciones(nacion1, nacion2):
+    return lt.size(nacion1)>lt.size(nacion2)
+
+def base(catalog):
+    nacionalidades = encontrarnacionalidades(catalog)
+    mayor = lt.newList('SINGLE_LINKED')
+    cargar(nacionalidades, mayor, catalog)
+    top10 = encontrarmayores(mayor)
+    return top10
+
+def primeras3pais(lista):
+    paisprev = lt.firstElement(lista)
+    elementos = lt.size(paisprev)-1
+    pais = lt.subList(paisprev, 2,elementos)
+    infos = merge.sort(pais, compararfechaadquisicion)
+    o =0
+    info = lt.newList("ARRAY_LIST")
+    for algo in lt.iterator(infos):
+        o+=1  
+        if algo[0]['DateAcquired']!=-1:   
+            lt.addLast(info, algo)
+    uno = lt.firstElement(info)
+    dos = lt.getElement(info, 2)
+    tres = lt.getElement(info, 3)
+    menostres = lt.getElement(info, -2)
+    menosdos = lt.getElement(info, -1)
+    menosuno = lt.lastElement(info)
+    stringpositivo = "Primeras tres por fecha de adquisicion: "
+    stringnegativo = "Ultimas tres por fecha de adquisicion: "
+    res = [uno, dos, tres], [menostres, menosdos, menosuno], [stringpositivo, stringnegativo]
     
+    return res
+
+
+
+def compararfechaadquisicion(fecha1, fecha2):
+    return fecha1[0]['DateAcquired']<fecha2[0]['DateAcquired']
+
+
+def encontrarnombres(catalogo):
+    dic = lt.newList('ARRAY_LIST')
+    for piece in lt.iterator(catalogo['pieces']):
+        for artist in lt.iterator(catalogo['artists']):
+            IDS = reemplazar(piece)
+            IDSU = modvarios(IDS)
+            if type(IDSU) == list:
+                for ID in IDSU:
+                    if ID == artist['ConstituentID']:
+                        lt.addLast(dic, [ID, artist['DisplayName']])
+
+            elif type(IDSU)==str:
+                
+                if IDSU == artist['ConstituentID']:
+                 
+                    lt.addLast(dic, [IDSU, artist['DisplayName']])
+    catalogo['names']=dic
+    
+
+def buscarpiece(catalog, titulo):
+    for piece in lt.iterator(catalog['pieces']):
+        if piece['Title'] == titulo:
+            return piece
+    
+def busqueda(catalog):
+    for buscar in lt.iterator(catalog['pieces']):
+        IDS = reemplazar(buscar)
+        IDSU = modvarios(IDS)
+        #if IDSU==str(4514):
+            #print(IDSU)
+      
+        if type(IDSU) ==str:
+            if IDSU == str(4514):
+                print(IDSU)
+       
+def buscarids(catalog, titulo):
+    artistas = []
+    IDSprev = buscarpiece(catalog, titulo) #devuelve piece con el titulo
+    IDS = reemplazar(IDSprev)
+    IDSU = modvarios(IDS)
+    if type(IDSU)==list:
+        i =0
+        cuenta = lt.newList('ARRAY_LIST')
+        for ID in IDSU:
+            for parte in lt.iterator(catalog['names']):
+                if parte[0] ==ID:
+                    
+                    
+                    i+=1
+                    if i ==1:
+                        name = 'Artista' + str(i)+" "+ str(parte[1])
+                        artistas.append(name)
+                    if i >1 and lt.isPresent(cuenta, parte[1])==0:
+                        name = ' - Artista' + str(i)+" "+ str(parte[1])
+                        artistas.append(name)
+                    lt.addLast(cuenta, parte[1])
+        return artistas
+    
+    elif type(IDSU)==str:
+        i =0
+        for modulo in lt.iterator(catalog['names']):
+            if modulo[0] == IDSU and i ==0:
+                i+=1
+                #return modulo[0]
+                name = 'Artista '+ str(modulo[1])
+                artistas.append(name)
+    
+        return artistas

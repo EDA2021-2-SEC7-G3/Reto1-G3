@@ -25,7 +25,7 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
-
+import model
 
 """
 La vista se encarga de la interacción con el usuario
@@ -136,6 +136,41 @@ catalog = None
 
 def countPurchase():
     print(controller.countPurchase())
+
+
+def primeras3pais(lista):
+    return controller.primeras3pais(lista)
+def encontrarnombres(catalogo):
+    controller.encontrarnombres(catalogo)
+
+def buscarids(catalog, titulo):
+    return controller.buscarids(catalog, titulo)
+    
+def imprimirinfo(obtener, catalog):
+    
+    for word in obtener[0]:
+  
+        
+        titulo = word[0]['Title']
+        print(obtener[2][0])
+        print('Titulo: ' + str(word[0]['Title']))
+        print('Artistas: ' )
+        print(buscarids(catalog, titulo))
+        print('Fecha de obra: ' + str(word[0]['Date']))
+        print('Medio: ' + str(word[0]['Medium']))
+        print('Dimensiones: ' + str(word[0]['Dimensions']) + '\n')
+        
+    for word in obtener[1]:
+        titulo = word[0]['Title']
+        print(obtener[2][1])
+        print('Titulo: ' + str(word[0]['Title']))
+        print('Artistas: ' )
+        print(buscarids(catalog, titulo))
+        print('Fecha de obra: ' + str(word[0]['Date']))
+        print('Medio: ' + str(word[0]['Medium']))
+        print('Dimensiones: ' + str(word[0]['Dimensions']) + '\n')
+
+        
 """
 Menu principal
 """
@@ -145,7 +180,9 @@ while True:
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
         catalog = initCatalog()
+        
         loadData(catalog)
+        print(catalog['names'])
         piecesAmmount = lt.size(catalog['pieces'])
         artistsAmmount = lt.size(catalog['artists'])
         print('Obras cargadas: ' + str(piecesAmmount))
@@ -204,10 +241,14 @@ while True:
 
         
     elif int(inputs[0])==5:
-        listaprev = controller.base()
-
-        print(listaprev)
+        listaprev = controller.base(catalog)
         
+        
+        print('Top 10 paises por numero de obras: ' + '\n' + str(listaprev[0])+'\n'+'\n')
+        obtener = primeras3pais(listaprev[1])
+        imprimirinfo(obtener, catalog)
+        #print(catalog['names'])
+       
     else:
         sys.exit(0)
 sys.exit(0)

@@ -41,19 +41,21 @@ def loadData(catalog):
     loadArtists(catalog)
     sortArtists(catalog)
     sortPieces(catalog)
+    loadnames(catalog)
     
-
+def loadnames(catalog):
+    model.encontrarnombres(catalog)
 def loadPieces(catalog):
-    piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-large.csv'
+    piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
     input_file = csv.DictReader(open(piecesfile, encoding='utf-8'))
     for piece in input_file:
-        #print(model.fixdatePieces(piece))
+        #print(piece['ConstituentID'])
         piece = model.fixdatePieces(piece)
         model.addPiece(catalog, piece)   
         
 
 def countPurchase():
-    piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-large.csv'
+    piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
     input_file = csv.DictReader(open(piecesfile, encoding='utf-8'))
     i=0
     for piece in input_file:
@@ -63,7 +65,7 @@ def countPurchase():
 
 #'''''
 def compareid(numerodepaquete,param):
-    artistsfile = cf.data_dir + 'MoMA/Artists-utf8-large.csv'
+    artistsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
     input_file = csv.DictReader(open(artistsfile, encoding='utf-8'))
     nombres = ''
     
@@ -84,24 +86,6 @@ def compareid(numerodepaquete,param):
     return nombres
 
 
-def loadinfo(IDS, piece, file_ca, mayor):
-    if type(IDS)==list:
-        for artist in file_ca:
-            for ID in IDS:
-                if ID == artist['ConstituentID']:
-                    infotemp= [piece, artist["DisplayName"]]
-                    operacionesloadinfo(mayor, artist, infotemp)                        
-    else:
-        for artist in file_ca:
-            if IDS == artist['ConstituentID']:  
-                infotemp= [piece, artist["DisplayName"]]
-                operacionesloadinfo(mayor, artist, infotemp)  
-
-def operacionesloadinfo(mayor, artist, infotemp):
-    for sublist in model.iterator(mayor):
-        if model.firstelement(sublist) == artist["Nationality"]:
-            model.ponerultimo(sublist, infotemp)
-    
 def varioslista (IDS, param):
     ID = IDS
     adicional = {}
@@ -113,47 +97,24 @@ def varioslista (IDS, param):
     return ID, adicional
 
 
-def reemplazar(uno):
-    uno = str(uno["ConstituentID"]).replace("[",'')
-    uno =uno.replace(']', '')
-    return uno
+
     #'''    
-def fileoc():
-    piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-large.csv'
-    input_file = csv.DictReader(open(piecesfile, encoding='utf-8'))
-    return input_file
-def fileca():
-    piecesfile = cf.data_dir + 'MoMA/Artists-utf8-large.csv'
-    input_file = csv.DictReader(open(piecesfile, encoding='utf-8'))
-    return input_file
-def base():
-    file_oc = fileoc()
-    file_ca = fileca()
-    mayor = model.crearlista()
-    cargar(mayor, file_oc, file_ca)
-    return mayor
-def cargar(mayor, file_oc, file_ca):
-    nacionalidades = encontrarnacionalidades(file_ca) #encuentra nacionalidades
-    for nacionalidad in nacionalidades:
-        model.cargarfuncion(mayor, file_oc, file_ca, nacionalidades, nacionalidad)
-        
-        for piece in file_oc:
-            IDSU = reemplazar(piece) #reemplaza los []
-            IDS = model.modvarios(IDSU) #divide en lista los ID
-            loadinfo(IDS, piece, file_ca, mayor) #agrega piece info en sublista de la nacionalidad
-            #print(mayor)
+
+def base(catalog):
+    resultado = model.base(catalog)
+    return resultado
+
+def cargar(mayor, catalog):
     
-def encontrarnacionalidades(file_ca):
-    nacionalidades  =[]
-    for artist in file_ca:
-        if artist["Nationality"] not in nacionalidades:
-            nacionalidad =  artist["Nationality"]
-            nacionalidades.append(nacionalidad)
-    return nacionalidades
+    nacionalidades = model.encontrarnacionalidades(catalog) #encuentra nacionalidades
+    resultado = model.cargar(nacionalidades, mayor, catalog)
+    return resultado    
+    
+
         
 
 def loadArtists(catalog):
-    artistsfile = cf.data_dir + 'MoMA/Artists-utf8-large.csv'
+    artistsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
     input_file = csv.DictReader(open(artistsfile, encoding='utf-8'))
     for artist in input_file:
         model.addArtist(catalog, artist)
@@ -176,3 +137,12 @@ def listChronologically(catalog, stYear, fnYear):
 
 def classifyByTechnique(catalog, authorName):
     return model.classifyByTechnique(catalog, authorName)
+
+def primeras3pais(lista):
+    return model.primeras3pais(lista)
+
+def encontrarnombres(catalogo):
+    model.encontrarnombres(catalogo)
+
+def buscarids(catalog, titulo):
+    return model.buscarids(catalog, titulo)
