@@ -137,5 +137,9 @@ def primeras3pais(lista):
 def encontrarnombres(catalogo):
     model.encontrarnombres(catalogo)
 
-def buscarids(catalog, titulo):
-    return model.buscarids(catalog, titulo)
+def buscarids(catalog, titulo, date):
+    return model.buscarids(catalog, titulo, date)
+
+def reemplazar(uno):
+    return model.reemplazar(uno)
+
