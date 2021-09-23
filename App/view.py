@@ -25,7 +25,7 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
-import model
+
 
 """
 La vista se encarga de la interacción con el usuario
