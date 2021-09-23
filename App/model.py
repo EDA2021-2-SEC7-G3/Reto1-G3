@@ -25,7 +25,7 @@
  """
 
 
-from DISClib.DataStructures.arraylist import getElement
+from DISClib.DataStructures.arraylist import addLast, getElement
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
@@ -97,9 +97,9 @@ def fixdatePieces(piecelist):
                                     dayd = dayd*0.0001
                                     year = year + dayd
                                     year = round(year,4)
-                                    #return round(year,4)
+    
     #'''
-    piecelist['DateAcquired']=float(year)
+    piecelist['DateAcquired']=float(year)*10000
     return piecelist
 def addDepartment(catalog, departmentName, piece):
     departmentsList = catalog['departments']
@@ -148,12 +148,16 @@ def listChronologically(catalog, stYear, fnYear):
     return artistList
 
 def listChronologicallypieces(catalog, beginingyr, endingyr):
+    
     piecesList = lt.newList('ARRAY_LIST')
     for piece in lt.iterator(catalog['pieces']):
-        if (piece['DateAcquired'] >= beginingyr) and (piece['DateAcquired'] <= endingyr):
+  
+        if (piece['DateAcquired'] >= beginingyr*10000) and (piece['DateAcquired'] <= endingyr*10000):
+       
             lt.addLast(piecesList, piece)
+          
     return piecesList
-
+    
 
 
 
@@ -352,9 +356,9 @@ def encontrarnombres(catalogo):
     catalogo['names']=dic
     
 
-def buscarpiece(catalog, titulo):
+def buscarpiece(catalog, titulo, date):
     for piece in lt.iterator(catalog['pieces']):
-        if piece['Title'] == titulo:
+        if piece['Title'] == titulo and piece['Date']==date:
             return piece
     
 def busqueda(catalog):
@@ -368,19 +372,19 @@ def busqueda(catalog):
             if IDSU == str(4514):
                 print(IDSU)
        
-def buscarids(catalog, titulo):
+def buscarids(catalog, titulo, date):
     artistas = []
-    IDSprev = buscarpiece(catalog, titulo) #devuelve piece con el titulo
+    IDSprev = buscarpiece(catalog, titulo, date) #devuelve piece con el titulo
     IDS = reemplazar(IDSprev)
     IDSU = modvarios(IDS)
+
     if type(IDSU)==list:
         i =0
         cuenta = lt.newList('ARRAY_LIST')
         for ID in IDSU:
             for parte in lt.iterator(catalog['names']):
                 if parte[0] ==ID:
-                    
-                    
+                                        
                     i+=1
                     if i ==1:
                         name = 'Artista' + str(i)+" "+ str(parte[1])
@@ -401,3 +405,4 @@ def buscarids(catalog, titulo):
                 artistas.append(name)
     
         return artistas
+

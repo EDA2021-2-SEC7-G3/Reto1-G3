@@ -27,6 +27,7 @@ from DISClib.ADT import list as lt
 assert cf
 
 
+
 """
 La vista se encarga de la interacción con el usuario
 Presenta el menu de opciones y por cada seleccion
@@ -117,8 +118,8 @@ def printPieceData(piece, result, listsize, param):
     print('Medio: ' + piece['Medium'])
     print('Dimensiones: ') 
     print(piece['Dimensions']+ '\n'+ '\n') 
+    
   
-
 def printPieceDat(piece):
     print('Título de la obra: ' + piece['Title'])
    
@@ -143,34 +144,36 @@ def primeras3pais(lista):
 def encontrarnombres(catalogo):
     controller.encontrarnombres(catalogo)
 
-def buscarids(catalog, titulo):
-    return controller.buscarids(catalog, titulo)
+def buscarids(catalog, titulo, date):
+    return controller.buscarids(catalog, titulo, date)
     
 def imprimirinfo(obtener, catalog):
-    
+    #print(obtener[0][2])
+    #'''
+    print(obtener[2][0])
     for word in obtener[0]:
-  
-        
         titulo = word[0]['Title']
-        print(obtener[2][0])
+        date = word[0]['Date']
         print('Titulo: ' + str(word[0]['Title']))
         print('Artistas: ' )
-        print(buscarids(catalog, titulo))
+        print(buscarids(catalog, titulo, date ))
         print('Fecha de obra: ' + str(word[0]['Date']))
         print('Medio: ' + str(word[0]['Medium']))
         print('Dimensiones: ' + str(word[0]['Dimensions']) + '\n')
-        
+    print(obtener[2][1])
     for word in obtener[1]:
         titulo = word[0]['Title']
+        date = word[0]['Date']
         print(obtener[2][1])
         print('Titulo: ' + str(word[0]['Title']))
         print('Artistas: ' )
-        print(buscarids(catalog, titulo))
+        print(buscarids(catalog, titulo, date))
         print('Fecha de obra: ' + str(word[0]['Date']))
         print('Medio: ' + str(word[0]['Medium']))
         print('Dimensiones: ' + str(word[0]['Dimensions']) + '\n')
 
-        
+    #'''
+
 """
 Menu principal
 """
@@ -182,7 +185,7 @@ while True:
         catalog = initCatalog()
         
         loadData(catalog)
-        print(catalog['names'])
+        #print(catalog['names'])
         piecesAmmount = lt.size(catalog['pieces'])
         artistsAmmount = lt.size(catalog['artists'])
         print('Obras cargadas: ' + str(piecesAmmount))
@@ -213,22 +216,26 @@ while True:
         endingyr = float(endingyrprev[:7].replace("/",".") + beginingyrprev[8:10])
         #print(catalog)
         #'''
-        unsortedresult = controller.listChronologicallypieces(catalog, beginingyr, endingyr)
-
+        unsortedresult = controller.listChronologicallypieces(catalog, beginingyr, endingyr) #array con piezas en el rango
+        #result = controller.organizar(unsortedresult)
+        
         listSize = lt.size(unsortedresult)
-        print(str(unsortedresult['elements'][1]['Title']) + str(unsortedresult['elements'][1]['DateAcquired']))
+        #print(str(unsortedresult['elements'][1]['Title']) + str(unsortedresult['elements'][1]['DateAcquired']))
         
         print('Cantidad total de piezas en el rango: ' + str(listSize) + '\n')
         print('Cantidad de obras adquiridas mediante compra: ')
         comprados = countPurchase()
         print('Primeras 3 obras adquiridas en el rango: ' + '\n')
+        
+
+        
         print(firstThreePieces(unsortedresult, listSize))
         
         
         print('Últimas 3 piezas adquiridas en el rango: ' + '\n')
         print(lastThreePieces(unsortedresult, listSize))
-        #'''
     
+        
 
     elif int(inputs[0]) == 4:
         authorName = input('¿Qué artista desea clasificar? ')
