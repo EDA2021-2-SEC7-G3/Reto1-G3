@@ -45,6 +45,7 @@ def loadData(catalog):
     
 def loadnames(catalog):
     model.encontrarnombres(catalog)
+    
 def loadPieces(catalog):
     piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
     input_file = csv.DictReader(open(piecesfile, encoding='utf-8'))
@@ -67,7 +68,6 @@ def compareid(uno, dos, tres, menostres, menosdos, menosuno):
     nombres = ''
     
     for artist in input_file:
-        
         if len(numerodepaquete[1]) != 0:
             x = numerodepaquete[1][param]
             
@@ -78,10 +78,8 @@ def compareid(uno, dos, tres, menostres, menosdos, menosuno):
         else:
             if numerodepaquete[0] == artist["ConstituentID"] and len(numerodepaquete[1])==0:
                 nombres = artist["DisplayName"]
-            
         #'''
     return nombres
-
 
 def varioslista (IDS, param):
     ID = IDS
@@ -92,9 +90,6 @@ def varioslista (IDS, param):
         adicional.update(adicionalprev)
     
     return ID, adicional
-
-
-
     #'''    
 
 def base(catalog):
@@ -107,9 +102,6 @@ def cargar(mayor, catalog):
     resultado = model.cargar(nacionalidades, mayor, catalog)
     return resultado    
     
-
-        
-
 def loadArtists(catalog):
     artistsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
     input_file = csv.DictReader(open(artistsfile, encoding='utf-8'))
@@ -123,7 +115,6 @@ def sortArtists(catalog):
 
 def sortPieces(catalog):
     model.sortPieces(catalog)
-
 
 # Funciones de consulta sobre el catálogo
 def listChronologicallypieces(catalog, beginingyr, endingyr):

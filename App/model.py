@@ -150,10 +150,6 @@ def listChronologically(catalog, stYear, fnYear):
     elapsedTime = (stopTime - startTime) * 1000
     return artistList, elapsedTime
 
-
-
-
-
 def ponerprimero(listaprev, nacionalidad):
     lt.addFirst(listaprev, nacionalidad)
 
@@ -260,9 +256,7 @@ def cargar(nacionalidades, mayor, catalog):
                 if IDS == artist['ConstituentID']:  
                     infotemp= [piece, artist["DisplayName"]]
                     operacionesloadinfo(mayor, artist, infotemp)  
-        
-        
-                     
+                 
 def operacionesloadinfo(mayor, artist, infotemp):
     o=0
     for sublist in lt.iterator(mayor):
@@ -319,11 +313,8 @@ def primeras3pais(lista):
     
     return res
 
-
-
 def compararfechaadquisicion(fecha1, fecha2):
     return fecha1[0]['DateAcquired']<fecha2[0]['DateAcquired']
-
 
 def encontrarnombres(catalogo):
     dic = lt.newList('ARRAY_LIST')
@@ -343,7 +334,6 @@ def encontrarnombres(catalogo):
                     lt.addLast(dic, [IDSU, artist['DisplayName']])
     catalogo['names']=dic
     
-
 def buscarpiece(catalog, titulo):
     for piece in lt.iterator(catalog['pieces']):
         if piece['Title'] == titulo:

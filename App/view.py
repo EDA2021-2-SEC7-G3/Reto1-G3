@@ -25,7 +25,6 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
-import model
 
 """
 La vista se encarga de la interacción con el usuario
@@ -106,6 +105,10 @@ def PiecesID(result, listsize, parametro):
 
     print(controller.compareid(controller.varioslista(IDS, parametro), parametro))
 #'''
+
+def printname(dict,parametro):  
+    print(dict[parametro])
+
 def lastThreePiecesOnCatalog(catalog, size):
     printPieceDat(catalog['pieces']['elements'][size - 3])
     printPieceDat(catalog['pieces']['elements'][size - 2])
@@ -120,7 +123,6 @@ def printPieceData(piece, result, listsize, param):
     print('Dimensiones: ') 
     print(piece['Dimensions']+ '\n'+ '\n') 
   
-
 def printPieceDat(piece):
     print('Título de la obra: ' + piece['Title'])
    
