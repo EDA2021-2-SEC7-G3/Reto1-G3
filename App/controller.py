@@ -92,6 +92,11 @@ def varioslista (IDS, param):
     return ID, adicional
     #'''    
 
+def reemplazar(uno):
+    uno = str(uno["ConstituentID"]).replace("[",'')
+    uno =uno.replace(']', '')
+    return uno
+
 def base(catalog):
     resultado = model.base(catalog)
     return resultado
