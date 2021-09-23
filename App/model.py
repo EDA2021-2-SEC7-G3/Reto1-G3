@@ -150,6 +150,13 @@ def listChronologically(catalog, stYear, fnYear):
     elapsedTime = (stopTime - startTime) * 1000
     return artistList, elapsedTime
 
+def listChronologicallypieces(catalog, beginingyr, endingyr):
+    piecesList = lt.newList('ARRAY_LIST')
+    for piece in lt.iterator(catalog['pieces']):
+        if (piece['DateAcquired'] >= beginingyr) and (piece['DateAcquired'] <= endingyr):
+            lt.addLast(piecesList, piece)
+    return piecesList
+
 def ponerprimero(listaprev, nacionalidad):
     lt.addFirst(listaprev, nacionalidad)
 
