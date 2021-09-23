@@ -43,8 +43,10 @@ def loadData(catalog):
     sortPieces(catalog)
     loadnames(catalog)
     
+
 def loadnames(catalog):
     model.encontrarnombres(catalog)
+
 def loadPieces(catalog):
     piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
     input_file = csv.DictReader(open(piecesfile, encoding='utf-8'))
@@ -53,19 +55,19 @@ def loadPieces(catalog):
         piece = model.fixdatePieces(piece)
         model.addPiece(catalog, piece)   
         
-
 def countPurchase():
     piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
     input_file = csv.DictReader(open(piecesfile, encoding='utf-8'))
     i=0
     for piece in input_file:
         i = model.countP(piece, i)
-    
     return int(i)
+
 
 #'''''
 def compareid(numerodepaquete,param):
     artistsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
+
     input_file = csv.DictReader(open(artistsfile, encoding='utf-8'))
     nombres = ''
     

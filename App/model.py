@@ -32,6 +32,8 @@ from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.Algorithms.Sorting import mergesort as merge
 assert cf
 from decimal import Decimal
+import time
+
 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
@@ -55,7 +57,6 @@ def newCatalog():
                
 # Funciones para agregar informacion al catalogo
 def addPiece(catalog, piece):
-    
     lt.addLast(catalog['pieces'], piece)
     department = piece['Department']
     addDepartment(catalog, department, piece)
@@ -101,6 +102,7 @@ def fixdatePieces(piecelist):
     #'''
     piecelist['DateAcquired']=float(year)
     return piecelist
+
 def addDepartment(catalog, departmentName, piece):
     departmentsList = catalog['departments']
     posDepartment = lt.isPresent(departmentsList, departmentName)
@@ -128,10 +130,10 @@ def newTechnique(name):
     return technique
 
 def countP(piece, i):
-    
     if 'Purchase' in piece['CreditLine']:
         i+=1
     return i
+
 
 def modvarios(IDSU):
     ID = IDSU
@@ -141,18 +143,14 @@ def modvarios(IDSU):
 
 # Funciones de consulta
 def listChronologically(catalog, stYear, fnYear):
+    startTime = time.process_time()
     artistList = lt.newList('ARRAY_LIST')
     for artist in lt.iterator(catalog['artists']):
         if (artist['BeginDate'] >= stYear) and (artist['BeginDate'] <= fnYear):
             lt.addLast(artistList, artist)
-    return artistList
-
-def listChronologicallypieces(catalog, beginingyr, endingyr):
-    piecesList = lt.newList('ARRAY_LIST')
-    for piece in lt.iterator(catalog['pieces']):
-        if (piece['DateAcquired'] >= beginingyr) and (piece['DateAcquired'] <= endingyr):
-            lt.addLast(piecesList, piece)
-    return piecesList
+    stopTime = time.process_time()
+    elapsedTime = (stopTime - startTime) * 1000
+    return artistList, elapsedTime
 
 
 
@@ -170,6 +168,7 @@ def crearsublistanacionalidades(input_file):
 
 
 def classifyByTechnique(catalog, authorName):
+    startTime = time.process_time()
     authorID = None
     for artist in lt.iterator(catalog['artists']):
         if artist['DisplayName'] == authorName:
@@ -195,9 +194,9 @@ def classifyByTechnique(catalog, authorName):
             mostUsedTechnique['name'] = technique['name']
             mostUsedTechnique['piecesList'] = technique['pieces']
             mostUsedTechnique['mostPieces'] = ammPieces
-
-    return totalPieces, totalTechniques, mostUsedTechnique['name'], mostUsedTechnique['piecesList']
-
+    stopTime = time.process_time()
+    elapsedTime = (stopTime - startTime) * 1000
+    return totalPieces, totalTechniques, mostUsedTechnique['name'], mostUsedTechnique['piecesList'], elapsedTime
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 def comparedepartments(department1, department2):
@@ -214,18 +213,14 @@ def comparebirthday(firstArtist, secondArtist):
     return (int(firstArtist['BeginDate']) < int(secondArtist['BeginDate']))
 
 def comparedate(firstyear, secondyear):
- 
     return (int(firstyear['DateAcquired']) < int(secondyear['DateAcquired']))
-
-
 
 # Funciones de ordenamiento
 def sortArtists(catalog):
     sa.sort(catalog['artists'], comparebirthday)
 
-
-
 def sortPieces(catalog):
+
     merge.sort(catalog['pieces'], comparedate)
 
 def encontrarnacionalidades(catalog):
@@ -401,3 +396,4 @@ def buscarids(catalog, titulo):
                 artistas.append(name)
     
         return artistas
+

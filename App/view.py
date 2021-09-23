@@ -42,6 +42,8 @@ def printMenu():
     print("4- Clasificar las obras de un artista por técnica")
     print("5- Clasificar las obras por la nacionalidad de sus creadores")
 
+listType = None
+
 def initCatalog():
     return controller.initCatalog()
 
@@ -83,6 +85,7 @@ def lastThreePieces(result, listsize):
 
 #''''
 def PiecesID(result, listsize, parametro):
+
     if parametro == 'uno':
         uno = result['elements'][1]
         IDS = controller.reemplazar(uno)
@@ -104,6 +107,11 @@ def PiecesID(result, listsize, parametro):
 
     print(controller.compareid(controller.varioslista(IDS, parametro), parametro))
 #'''
+
+def printname(dict,parametro):  
+    print(dict[parametro])
+
+
 def lastThreePiecesOnCatalog(catalog, size):
     printPieceDat(catalog['pieces']['elements'][size - 3])
     printPieceDat(catalog['pieces']['elements'][size - 2])
@@ -114,10 +122,12 @@ def printPieceData(piece, result, listsize, param):
     print('Artista: ') 
     PiecesID(result, listsize, param)
     print('Fecha: ' + piece['Date'])
+
     print('Medio: ' + piece['Medium'])
     print('Dimensiones: ') 
     print(piece['Dimensions']+ '\n'+ '\n') 
   
+
 
 def printPieceDat(piece):
     print('Título de la obra: ' + piece['Title'])
@@ -178,7 +188,7 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
-        print("Cargando información de los archivos ....")
+        print("Cargando información de los archivos...")
         catalog = initCatalog()
         
         loadData(catalog)
@@ -191,19 +201,19 @@ while True:
         print('Artistas cargados: ' + str(artistsAmmount))
         print('Últimos tres artistas: \n')
         print(lastThreeArtistsOnCatalog(catalog, artistsAmmount))
-        print('Departamentos existentes cargados: ' + str(lt.size(catalog['departments'])))
+        print('Departamentos existentes cargados: ' + str(lt.size(catalog['departments'])) + '\n')
 
     elif int(inputs[0]) == 2:
         stYear = input("¿Desde qué año desea empezar a hacer la búsqueda? ")
         fnYear = input("¿Hasta qúe año? ")
         answer = controller.listChronologically(catalog, stYear, fnYear)
-        
-        listSize = lt.size(answer)
+        listSize = lt.size(answer[0])
         print('Cantidad total de artistas en el rango: ' + str(listSize) + '\n')
         print('Primeros 3 artistas en el rango: ' + '\n')
-        print(firstThreeArtists(answer, listSize))
+        print(firstThreeArtists(answer[0], listSize))
         print('Últimos 3 artistas en el rango: ' + '\n')
-        print(lastThreeArtists(answer, listSize))
+        print(lastThreeArtists(answer[0], listSize))
+        print('El tiempo que se demoró en ejecutar fue de ' + str(answer[1]) + 'ms.')
 
 
     elif int(inputs[0]) == 3:
@@ -238,6 +248,7 @@ while True:
         print('Su técnica más usada fue: ' + answer[2])
         print('Esta es la lista de obras en las que usó dicha técnica: \n')
         print(printDatabyTechnique(answer[3]))
+        print('El tiempo que se demoró en ejecutar fue de ' + str(answer[4]) + 'ms.')
 
         
     elif int(inputs[0])==5:
