@@ -20,6 +20,7 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+#from typing_extensions import ParamSpecArgs
 import config as cf
 import model
 import csv
@@ -40,16 +41,20 @@ def loadData(catalog):
     loadArtists(catalog)
     sortArtists(catalog)
     sortPieces(catalog)
+    loadnames(catalog)
     
+def loadnames(catalog):
+    model.encontrarnombres(catalog)
 def loadPieces(catalog):
-    piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-large.csv'
+    piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
     input_file = csv.DictReader(open(piecesfile, encoding='utf-8'))
     for piece in input_file:
+        #print(piece['ConstituentID'])
         piece = model.fixdatePieces(piece)
         model.addPiece(catalog, piece)   
         
 def countPurchase():
-    piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-large.csv'
+    piecesfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
     input_file = csv.DictReader(open(piecesfile, encoding='utf-8'))
     i=0
     for piece in input_file:
@@ -59,49 +64,54 @@ def countPurchase():
 def compareid(uno, dos, tres, menostres, menosdos, menosuno):
     artistsfile = cf.data_dir + 'MoMA/Artists-utf8-large.csv'
     input_file = csv.DictReader(open(artistsfile, encoding='utf-8'))
-    dicnombres = {}
+    nombres = ''
     
     for artist in input_file:
-       
-        if (uno == artist["ConstituentID"]):
-            
-            dictemp = {'uno':artist["DisplayName"]}
-            dicnombres.update(dictemp)
         
-    
-        if (dos == artist["ConstituentID"]):
+        if len(numerodepaquete[1]) != 0:
+            x = numerodepaquete[1][param]
             
-            dictemp = {'dos':artist["DisplayName"]}
-            dicnombres.update(dictemp)
-   
-        if (tres == artist["ConstituentID"]):
+            for o in range(x):
+                #print(numerodepaquete[0][o], artist["ConstituentID"])
+                if numerodepaquete[0][o] == artist["ConstituentID"]:
+                    nombres += 'Artist'+str(o+1)+' ' + artist["DisplayName"]+ '. '
+        else:
+            if numerodepaquete[0] == artist["ConstituentID"] and len(numerodepaquete[1])==0:
+                nombres = artist["DisplayName"]
             
-            dictemp = {'tres':artist["DisplayName"]}
-            dicnombres.update(dictemp)
-        if (menostres == artist["ConstituentID"]):
-           
-            dictemp = {'menostres':artist["DisplayName"]}
-            dicnombres.update(dictemp)
-        if (menosdos == artist["ConstituentID"]):
-           
-            dictemp = {'menosdos':artist["DisplayName"]}
-            dicnombres.update(dictemp)
-        if (menosuno == artist["ConstituentID"]):
-            
-            dictemp = {'menosuno':artist["DisplayName"]}
-            dicnombres.update(dictemp)
-            #'''
-    return dicnombres
+        #'''
+    return nombres
 
-def reemplazar(uno):
-    uno = str(uno["ConstituentID"]).replace("[",'')
-    uno =uno.replace(']', '')
-    return uno
+
+def varioslista (IDS, param):
+    ID = IDS
+    adicional = {}
+    if ", " in IDS:
+        ID = IDS.split(", ")
+        adicionalprev = {param: len(ID)}
+        adicional.update(adicionalprev)
+    
+    return ID, adicional
+
+
+
     #'''    
 
+def base(catalog):
+    resultado = model.base(catalog)
+    return resultado
+
+def cargar(mayor, catalog):
+    
+    nacionalidades = model.encontrarnacionalidades(catalog) #encuentra nacionalidades
+    resultado = model.cargar(nacionalidades, mayor, catalog)
+    return resultado    
+    
+
+        
 
 def loadArtists(catalog):
-    artistsfile = cf.data_dir + 'MoMA/Artists-utf8-large.csv'
+    artistsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
     input_file = csv.DictReader(open(artistsfile, encoding='utf-8'))
     for artist in input_file:
         model.addArtist(catalog, artist)
@@ -124,3 +134,12 @@ def listChronologically(catalog, stYear, fnYear):
 
 def classifyByTechnique(catalog, authorName):
     return model.classifyByTechnique(catalog, authorName)
+
+def primeras3pais(lista):
+    return model.primeras3pais(lista)
+
+def encontrarnombres(catalogo):
+    model.encontrarnombres(catalogo)
+
+def buscarids(catalog, titulo):
+    return model.buscarids(catalog, titulo)
