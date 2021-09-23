@@ -26,11 +26,8 @@ import controller
 from DISClib.ADT import list as lt
 assert cf
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> rama-adelanto-req-2-y-3
 """
 La vista se encarga de la interacción con el usuario
 Presenta el menu de opciones y por cada seleccion
